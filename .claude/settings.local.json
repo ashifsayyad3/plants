@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p \"e:\\\\plants\\\\lagaao\\\\backend\\\\src\\\\config\" \"e:\\\\plants\\\\lagaao\\\\backend\\\\src\\\\middleware\" \"e:\\\\plants\\\\lagaao\\\\backend\\\\src\\\\modules\" \"e:\\\\plants\\\\lagaao\\\\backend\\\\src\\\\routes\" \"e:\\\\plants\\\\lagaao\\\\backend\\\\src\\\\utils\" \"e:\\\\plants\\\\lagaao\\\\backend\\\\logs\" \"e:\\\\plants\\\\lagaao\\\\shared\\\\types\")"
+    ],
+    "additionalDirectories": [
+      "e:\\plants\\lagaao\\backend\\src"
+    ]
+  }
+}
