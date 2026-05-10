@@ -1,0 +1,126 @@
+<div class="data-table-wrapper">
+
+  <!-- Loading overlay -->
+  @if (loading) {
+    <div class="data-table__loader">
+      <mat-spinner diameter="40" />
+    </div>
+  }
+
+  <!-- Table -->
+  <div class="data-table__scroll">
+    <table mat-table [dataSource]="rows" matSort (matSortChange)="onSort($event)"
+      [class.data-table--loading]="loading">
+
+      <!-- Select column -->
+      @if (selectable) {
+        <ng-container matColumnDef="__select">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="toggleAll()"
+              [checked]="isAllSelected()"
+              [indeterminate]="selection.hasValue() && !isAllSelected()" />
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()"
+              (change)="toggleRow(row)"
+              [checked]="selection.isSelected(row)" />
+          </td>
+        </ng-container>
+      }
+
+      <!-- Dynamic columns -->
+      @for (col of columns; track col.key) {
+        <ng-container [matColumnDef]="col.key">
+          <th mat-header-cell *matHeaderCellDef
+            [mat-sort-header]="col.sortable ? col.key : ''"
+            [disabled]="!col.sortable"
+            [style.width]="col.width"
+            [class]="'align-' + (col.align ?? 'left')">
+            {{ col.header }}
+          </th>
+          <td mat-cell *matCellDef="let row"
+            [class]="'align-' + (col.align ?? 'left')"
+            (click)="rowClick.emit(row)">
+
+            @switch (col.type) {
+              @case ('badge') {
+                <app-status-badge
+                  [value]="$any(getCellValue(row, col))"
+                  [config]="col.badgeConfig" />
+              }
+              @case ('boolean') {
+                <mat-icon [class]="getCellValue(row, col) ? 'text-success' : 'text-muted'">
+                  {{ getCellValue(row, col) ? 'check_circle' : 'cancel' }}
+                </mat-icon>
+              }
+              @case ('date') {
+                {{ getCellValue(row, col) | date:'dd MMM yyyy' }}
+              }
+              @case ('currency') {
+                {{ getCellValue(row, col) | currency:'PKR':'symbol':'1.0-0' }}
+              }
+              @default {
+                {{ getCellValue(row, col) ?? '—' }}
+              }
+            }
+          </td>
+        </ng-container>
+      }
+
+      <!-- Actions column -->
+      @if (actions.length) {
+        <ng-container matColumnDef="__actions">
+          <th mat-header-cell *matHeaderCellDef class="align-right">Actions</th>
+          <td mat-cell *matCellDef="let row" class="align-right" (click)="$event.stopPropagation()">
+            @if (visibleActions(row).length === 1) {
+              <button mat-icon-button
+                [color]="visibleActions(row)[0].color ?? 'primary'"
+                [matTooltip]="visibleActions(row)[0].label"
+                [disabled]="visibleActions(row)[0].disabled?.(row)"
+                (click)="visibleActions(row)[0].action(row)">
+                <mat-icon>{{ visibleActions(row)[0].icon }}</mat-icon>
+              </button>
+            } @else if (visibleActions(row).length > 1) {
+              <button mat-icon-button [matMenuTriggerFor]="rowMenu">
+                <mat-icon>more_vert</mat-icon>
+              </button>
+              <mat-menu #rowMenu="matMenu">
+                @for (a of visibleActions(row); track a.label) {
+                  <button mat-menu-item
+                    [disabled]="a.disabled?.(row)"
+                    (click)="a.action(row)">
+                    <mat-icon [color]="a.color">{{ a.icon }}</mat-icon>
+                    {{ a.label }}
+                  </button>
+                }
+              </mat-menu>
+            }
+          </td>
+        </ng-container>
+      }
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns(); sticky: true" />
+      <tr mat-row *matRowDef="let row; columns: displayedColumns();"
+        [class.data-table__row--clickable]="rowClick.observed"
+        [trackBy]="trackById" />
+
+    </table>
+  </div>
+
+  <!-- Empty state -->
+  @if (!loading && rows.length === 0) {
+    <app-empty-state [icon]="emptyIcon" [title]="emptyTitle" [message]="emptyMessage" />
+  }
+
+  <!-- Paginator -->
+  @if (meta) {
+    <mat-paginator
+      [length]="meta.total"
+      [pageSize]="meta.limit"
+      [pageIndex]="meta.page - 1"
+      [pageSizeOptions]="[10, 20, 50, 100]"
+      showFirstLastButtons
+      (page)="onPage($event)" />
+  }
+
+</div>

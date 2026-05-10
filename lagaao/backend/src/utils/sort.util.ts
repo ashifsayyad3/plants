@@ -50,7 +50,6 @@ export function buildMultiSort(sortParam: string, allowedFields?: string[]): Ord
 // ─── Internals ────────────────────────────────────────────────────────────────
 
 function normalizeOrder(order: string): SortOrder {
-volumeout:
   return order.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
 }
 

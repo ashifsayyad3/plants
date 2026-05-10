@@ -1,0 +1,52 @@
+@use '../../../../styles/variables' as *;
+
+.data-table-wrapper {
+  position: relative;
+  background: var(--surface-card);
+  border-radius: $radius-lg;
+  border: 1px solid var(--surface-border);
+  overflow: hidden;
+}
+
+.data-table__scroll {
+  overflow-x: auto;
+}
+
+.data-table__loader {
+  position: absolute;
+  inset: 0;
+  background: rgba(var(--surface-card), 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: $z-raised;
+  backdrop-filter: blur(2px);
+}
+
+.data-table--loading { opacity: 0.5; pointer-events: none; }
+
+// Table styling
+table {
+  width: 100%;
+}
+
+.mat-mdc-header-row {
+  background: var(--surface-hover);
+  th { font-weight: 600; font-size: $font-size-sm; color: var(--text-secondary); white-space: nowrap; }
+}
+
+.mat-mdc-row {
+  transition: background $transition-fast;
+  &:hover { background: var(--surface-hover); }
+  td { font-size: $font-size-base; color: var(--text-primary); border-bottom-color: var(--surface-divider); }
+}
+
+.data-table__row--clickable { cursor: pointer; }
+
+// Alignment helpers
+.align-left   { text-align: left; }
+.align-center { text-align: center; }
+.align-right  { text-align: right; }
+
+.text-success { color: var(--status-success-text); }
+.text-muted   { color: var(--text-muted); }

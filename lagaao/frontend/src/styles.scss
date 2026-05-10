@@ -1,0 +1,145 @@
+// ─── Angular Material ─────────────────────────────────────────────────────────
+@use '@angular/material' as mat;
+
+// ─── Project Tokens ───────────────────────────────────────────────────────────
+@use 'styles/variables'        as *;
+@use 'styles/themes/light'     as *;
+@use 'styles/themes/dark'      as *;
+
+// ─── Material Theme ───────────────────────────────────────────────────────────
+$lagaao-primary: mat.m2-define-palette(mat.$m2-deep-purple-palette, 700, 400, 900);
+$lagaao-accent:  mat.m2-define-palette(mat.$m2-teal-palette, A400);
+$lagaao-warn:    mat.m2-define-palette(mat.$m2-red-palette);
+
+$lagaao-theme: mat.m2-define-light-theme((
+  color: (primary: $lagaao-primary, accent: $lagaao-accent, warn: $lagaao-warn),
+  typography: mat.m2-define-typography-config($font-family: $font-family-base),
+  density: -1,
+));
+
+@include mat.all-component-themes($lagaao-theme);
+
+// ─── Dark Material Theme ──────────────────────────────────────────────────────
+$lagaao-dark-theme: mat.m2-define-dark-theme((
+  color: (primary: $lagaao-primary, accent: $lagaao-accent, warn: $lagaao-warn),
+  density: -1,
+));
+
+[data-theme="dark"] {
+  @include mat.all-component-colors($lagaao-dark-theme);
+}
+
+// ─── Global Reset ─────────────────────────────────────────────────────────────
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  height: 100%;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  height: 100%;
+  font-family: $font-family-base;
+  background-color: var(--surface-background);
+  color: var(--text-primary);
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+// ─── Typography ───────────────────────────────────────────────────────────────
+h1, h2, h3, h4, h5, h6 {
+  margin: 0 0 $spacing-sm;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+
+p { margin: 0 0 $spacing-sm; color: var(--text-secondary); }
+a { color: var(--text-link); text-decoration: none;
+  &:hover { text-decoration: underline; } }
+
+// ─── Scrollbar ────────────────────────────────────────────────────────────────
+::-webkit-scrollbar       { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: $radius-full; }
+
+// ─── Utility Classes ──────────────────────────────────────────────────────────
+.full-width  { width: 100%; }
+.text-center { text-align: center; }
+.text-muted  { color: var(--text-muted) !important; }
+.text-sm     { font-size: $font-size-sm !important; }
+.mt-auto     { margin-top: auto; }
+.flex        { display: flex; }
+.flex-col    { display: flex; flex-direction: column; }
+.items-center{ align-items: center; }
+.gap-sm      { gap: $spacing-sm; }
+.gap-md      { gap: $spacing-md; }
+
+// ─── Card Surface Override ────────────────────────────────────────────────────
+.mat-mdc-card {
+  background: var(--surface-card) !important;
+  color:      var(--text-primary) !important;
+  box-shadow: $shadow-sm !important;
+  border:     1px solid var(--surface-border);
+  border-radius: $radius-lg !important;
+}
+
+// ─── Alert Utility ────────────────────────────────────────────────────────────
+.alert {
+  padding: $spacing-sm $spacing-md;
+  border-radius: $radius-md;
+  font-size: $font-size-base;
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  &.alert-error   { background: var(--status-error-bg);   color: var(--status-error-text);   border-left: 3px solid var(--status-error-text); }
+  &.alert-success { background: var(--status-success-bg); color: var(--status-success-text); border-left: 3px solid var(--status-success-text); }
+  &.alert-warning { background: var(--status-warning-bg); color: var(--status-warning-text); border-left: 3px solid var(--status-warning-text); }
+  &.alert-info    { background: var(--status-info-bg);    color: var(--status-info-text);    border-left: 3px solid var(--status-info-text); }
+}
+
+// ─── Page Container ───────────────────────────────────────────────────────────
+.page-container {
+  padding: $spacing-lg;
+  max-width: $content-max-width;
+  width: 100%;
+}
+
+// ─── Auth layout ─────────────────────────────────────────────────────────────
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: $spacing-md;
+  background: var(--surface-background);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+  padding: $spacing-sm $spacing-md $spacing-md;
+}
+
+.auth-header {
+  padding-bottom: $spacing-md;
+  mat-card-title { font-size: $font-size-xl; font-weight: 600; }
+}
+
+.submit-btn {
+  width: 100%;
+  height: 48px;
+  font-size: $font-size-md;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+}
+
+.auth-footer {
+  justify-content: center !important;
+  padding-top: $spacing-sm;
+  p { margin: 0; font-size: $font-size-sm; color: var(--text-muted); }
+  a { color: var(--text-link); font-weight: 500; }
+}

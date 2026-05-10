@@ -1,16 +1,9 @@
-@use '../login/login.component' as login;
-
-.auth-container { @extend .auth-container; }
-.auth-card      { @extend .auth-card; }
-.auth-header    { @extend .auth-header; }
-.full-width     { @extend .full-width; }
-.submit-btn     { @extend .submit-btn; }
-.auth-footer    { @extend .auth-footer; }
-.alert          { @extend .alert; }
+// Auth layout classes come from the global styles.scss auth-container/auth-card definitions.
+// Only register-specific styles live here.
 
 .strength-bar {
   height: 4px;
-  background: #e0e0e0;
+  background: var(--surface-hover);
   border-radius: 2px;
   margin: -4px 0 4px;
   overflow: hidden;
@@ -41,10 +34,10 @@
     font-size: 64px;
     width: 64px;
     height: 64px;
-    color: #43a047;
+    color: var(--status-success-text);
   }
 
   h2 { margin: 0; font-size: 22px; }
-  p  { margin: 0; color: #555; }
-  .hint { font-size: 13px; color: #888; }
+  p  { margin: 0; color: var(--text-secondary); }
+  .hint { font-size: 13px; color: var(--text-muted); }
 }

@@ -1,29 +1,23 @@
-<mat-sidenav-container class="sidenav-container">
+<div class="shell" [class.shell--collapsed]="!ui.sidebarOpen()">
 
-  <mat-sidenav #sidenav mode="side" [opened]="sidenavOpen" class="sidenav">
-    <mat-toolbar color="primary" class="sidenav-header">
-      <span>Lagaao</span>
-    </mat-toolbar>
-    <mat-nav-list>
-      <a mat-list-item routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">
-        <mat-icon matListItemIcon>home</mat-icon>
-        <span matListItemTitle>Home</span>
-      </a>
-    </mat-nav-list>
-  </mat-sidenav>
+  <!-- Global progress bar -->
+  @if (ui.isLoading()) {
+    <mat-progress-bar mode="indeterminate" class="shell__loader" />
+  }
 
-  <mat-sidenav-content>
-    <mat-toolbar color="primary" class="top-toolbar">
-      <button mat-icon-button (click)="sidenavOpen = !sidenavOpen">
-        <mat-icon>menu</mat-icon>
-      </button>
-      <span class="toolbar-spacer"></span>
-      <span>Lagaao.com</span>
-    </mat-toolbar>
+  <!-- Sidebar -->
+  <app-sidebar class="shell__sidebar" />
 
-    <main class="main-content">
+  <!-- Main area -->
+  <div class="shell__main">
+    <app-header />
+    <app-breadcrumb />
+
+    <main class="shell__content" role="main">
       <router-outlet />
     </main>
-  </mat-sidenav-content>
 
-</mat-sidenav-container>
+    <app-footer />
+  </div>
+
+</div>

@@ -1,0 +1,90 @@
+<aside class="sidebar" [class.sidebar--collapsed]="!isOpen()">
+
+  <!-- Brand -->
+  <div class="sidebar__brand">
+    <div class="sidebar__logo">
+      <mat-icon>storefront</mat-icon>
+    </div>
+    @if (isOpen()) {
+      <span class="sidebar__app-name">Lagaao</span>
+    }
+  </div>
+
+  <!-- Navigation -->
+  <nav class="sidebar__nav" role="navigation" aria-label="Main navigation">
+    @for (item of navItems(); track trackByLabel($index, item)) {
+
+      <!-- Divider -->
+      @if (item.divider) {
+        <div class="sidebar__divider"></div>
+
+      <!-- Group (with children) -->
+      } @else if (item.children?.length) {
+        <div class="sidebar__group">
+          <button class="sidebar__item sidebar__item--group"
+            (click)="toggleGroup(item.label)"
+            [class.sidebar__item--expanded]="isExpanded(item.label)"
+            [matTooltip]="!isOpen() ? item.label : ''"
+            matTooltipPosition="right">
+            <mat-icon class="sidebar__icon">{{ item.icon }}</mat-icon>
+            @if (isOpen()) {
+              <span class="sidebar__label">{{ item.label }}</span>
+              <mat-icon class="sidebar__chevron">
+                {{ isExpanded(item.label) ? 'expand_less' : 'expand_more' }}
+              </mat-icon>
+            }
+          </button>
+
+          @if (isOpen() && isExpanded(item.label)) {
+            <div class="sidebar__children">
+              @for (child of item.children; track child.label) {
+                <a class="sidebar__item sidebar__item--child"
+                  [routerLink]="child.route"
+                  routerLinkActive="sidebar__item--active"
+                  [routerLinkActiveOptions]="{ exact: child.route === '/' }">
+                  <mat-icon class="sidebar__icon sidebar__icon--sm">{{ child.icon }}</mat-icon>
+                  <span class="sidebar__label">{{ child.label }}</span>
+                </a>
+              }
+            </div>
+          }
+        </div>
+
+      <!-- Leaf item -->
+      } @else {
+        <a class="sidebar__item"
+          [routerLink]="item.route"
+          routerLinkActive="sidebar__item--active"
+          [routerLinkActiveOptions]="{ exact: item.route === '/' }"
+          [matTooltip]="!isOpen() ? item.label : ''"
+          matTooltipPosition="right">
+          <mat-icon class="sidebar__icon">{{ item.icon }}</mat-icon>
+          @if (isOpen()) {
+            <span class="sidebar__label">{{ item.label }}</span>
+            @if (item.badge) {
+              <span class="sidebar__badge">{{ item.badge }}</span>
+            }
+          } @else if (item.badge) {
+            <span class="sidebar__badge sidebar__badge--dot"></span>
+          }
+        </a>
+      }
+    }
+  </nav>
+
+  <!-- User mini card (bottom) -->
+  @if (app.currentUser()) {
+    <div class="sidebar__user">
+      <div class="sidebar__avatar">
+        {{ app.currentUser()!.name.charAt(0).toUpperCase() }}
+      </div>
+      @if (isOpen()) {
+        <div class="sidebar__user-info">
+          <span class="sidebar__user-name">{{ app.currentUser()!.name }}</span>
+          <span class="sidebar__user-role">{{ app.currentUser()!.roles[0] | titlecase }}</span>
+        </div>
+      }
+    </div>
+  }
+
+</aside>

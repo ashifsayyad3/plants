@@ -1,0 +1,71 @@
+<header class="header" role="banner">
+
+  <!-- Left: toggle + breadcrumb -->
+  <div class="header__left">
+    <button mat-icon-button class="header__toggle"
+      (click)="ui.toggleSidebar()"
+      aria-label="Toggle sidebar">
+      <mat-icon>{{ ui.sidebarOpen() ? 'menu_open' : 'menu' }}</mat-icon>
+    </button>
+
+    <span class="header__page-title">{{ ui.pageTitle() }}</span>
+  </div>
+
+  <!-- Right: actions -->
+  <div class="header__right">
+
+    <!-- Online indicator -->
+    @if (!app.isOnline()) {
+      <div class="header__offline" matTooltip="You are offline">
+        <mat-icon>wifi_off</mat-icon>
+        <span>Offline</span>
+      </div>
+    }
+
+    <!-- Theme toggle -->
+    <button mat-icon-button
+      (click)="theme.toggle()"
+      [matTooltip]="theme.isDark() ? 'Switch to light mode' : 'Switch to dark mode'"
+      aria-label="Toggle theme">
+      <mat-icon>{{ theme.isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    </button>
+
+    <!-- Notifications -->
+    <button mat-icon-button routerLink="/notifications"
+      matTooltip="Notifications" aria-label="Notifications">
+      <mat-icon
+        [matBadge]="unreadCount() > 0 ? unreadCount() : null"
+        matBadgeColor="warn"
+        matBadgeSize="small">
+        notifications
+      </mat-icon>
+    </button>
+
+    <!-- User Menu -->
+    @if (user()) {
+      <button mat-icon-button [matMenuTriggerFor]="userMenu"
+        class="header__avatar" aria-label="User menu">
+        {{ userInitial() }}
+      </button>
+
+      <mat-menu #userMenu="matMenu" xPosition="before">
+        <div class="user-menu__header">
+          <strong>{{ user()!.name }}</strong>
+          <span>{{ user()!.email }}</span>
+        </div>
+        <mat-divider />
+        <button mat-menu-item routerLink="/profile">
+          <mat-icon>person</mat-icon> My Profile
+        </button>
+        <button mat-menu-item routerLink="/settings">
+          <mat-icon>settings</mat-icon> Settings
+        </button>
+        <mat-divider />
+        <button mat-menu-item (click)="logout()" class="user-menu__logout">
+          <mat-icon>logout</mat-icon> Sign Out
+        </button>
+      </mat-menu>
+    }
+  </div>
+
+</header>

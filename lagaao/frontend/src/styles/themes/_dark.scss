@@ -1,0 +1,60 @@
+// Dark theme CSS custom properties
+[data-theme="dark"] {
+  --color-primary:        #a98cf4;
+  --color-primary-light:  #c4adff;
+  --color-primary-dark:   #7c5ce4;
+  --color-primary-bg:     #2a2040;
+
+  --color-accent:         #00d4a1;
+  --color-accent-light:   #00f5bb;
+  --color-accent-bg:      #00291f;
+
+  --color-warn:           #ff6b6b;
+  --color-warn-bg:        #3b1515;
+
+  // ── Surface ───────────────────────────────────────────────────────────────
+  --surface-background:   #12131e;
+  --surface-card:         #1a1b2e;
+  --surface-hover:        #22243a;
+  --surface-active:       #2a2d47;
+  --surface-border:       #2e3150;
+  --surface-divider:      #252742;
+
+  // ── Sidebar (darker in dark mode) ─────────────────────────────────────────
+  --sidebar-bg:           #0f1020;
+  --sidebar-text:         #c5c7d4;
+  --sidebar-text-muted:   #5f6280;
+  --sidebar-hover:        rgba(255,255,255,0.04);
+  --sidebar-active-bg:    rgba(169,140,244,0.15);
+  --sidebar-active-text:  #a98cf4;
+  --sidebar-border:       rgba(255,255,255,0.04);
+
+  // ── Header ────────────────────────────────────────────────────────────────
+  --header-bg:            #1a1b2e;
+  --header-border:        #2e3150;
+  --header-shadow:        0 1px 0 #2e3150;
+
+  // ── Text ──────────────────────────────────────────────────────────────────
+  --text-primary:         #e8eaf0;
+  --text-secondary:       #9fa3bc;
+  --text-muted:           #5f6280;
+  --text-disabled:        #3a3d5c;
+  --text-inverse:         #12131e;
+  --text-link:            #a98cf4;
+
+  // ── Status colours ────────────────────────────────────────────────────────
+  --status-success-bg:    #1b3a1c;
+  --status-success-text:  #81c784;
+  --status-warning-bg:    #3d2e00;
+  --status-warning-text:  #ffcc02;
+  --status-error-bg:      #3b1515;
+  --status-error-text:    #ff6b6b;
+  --status-info-bg:       #0d2040;
+  --status-info-text:     #64b5f6;
+  --status-neutral-bg:    #252742;
+  --status-neutral-text:  #9fa3bc;
+
+  // ── Scrollbar ─────────────────────────────────────────────────────────────
+  --scrollbar-thumb:      #2e3150;
+  --scrollbar-track:      transparent;
+}
