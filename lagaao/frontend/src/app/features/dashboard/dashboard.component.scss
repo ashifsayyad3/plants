@@ -1,0 +1,123 @@
+@use '../../../../styles/variables' as *;
+
+.dashboard {
+  padding: $spacing-lg;
+  max-width: 1600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+
+// ─── Header ───────────────────────────────────────────────────────────────────
+.dashboard__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+}
+
+.dashboard__header-left { display: flex; align-items: baseline; gap: $spacing-sm; }
+
+.dashboard__title {
+  margin: 0;
+  font-size: $font-size-xl;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.dashboard__refreshed {
+  font-size: $font-size-sm;
+  color: var(--text-muted);
+}
+
+.dashboard__header-right { display: flex; gap: $spacing-sm; flex-wrap: wrap; }
+
+// ─── KPI Grid (4 columns → 2 → 1) ────────────────────────────────────────────
+.dashboard__kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-md;
+}
+
+// ─── Chart Grid (2/3 + 1/3) ──────────────────────────────────────────────────
+.dashboard__chart-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: $spacing-md;
+  height: 300px;
+}
+
+.dashboard__chart-main,
+.dashboard__chart-side { height: 100%; }
+
+// ─── Full-width chart ─────────────────────────────────────────────────────────
+.dashboard__chart-full {
+  height: 260px;
+}
+
+// ─── Feed grid (60 / 40) ─────────────────────────────────────────────────────
+.dashboard__feed-grid {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: $spacing-md;
+  align-items: start;
+}
+
+.dashboard__feed-col {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+// ─── Search bar ───────────────────────────────────────────────────────────────
+.dashboard__search-bar {
+  display: flex;
+  align-items: center;
+  background: var(--surface-card);
+  border: 1px solid var(--surface-border);
+  border-radius: $radius-md;
+  padding: 0 $spacing-sm;
+  gap: $spacing-xs;
+  transition: border-color $transition-fast;
+
+  &:focus-within { border-color: var(--color-primary); }
+}
+
+.dashboard__search-icon { color: var(--text-muted); font-size: 20px; }
+
+.dashboard__search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: $font-size-sm;
+  padding: $spacing-sm 0;
+
+  &::placeholder { color: var(--text-muted); }
+}
+
+.dashboard__search-clear { flex-shrink: 0; }
+
+// ─── Responsive ───────────────────────────────────────────────────────────────
+@media (max-width: #{$breakpoint-lg}) {
+  .dashboard__kpi-grid  { grid-template-columns: repeat(2, 1fr); }
+  .dashboard__chart-grid { grid-template-columns: 1fr; height: auto;
+    .dashboard__chart-main { height: 280px; }
+    .dashboard__chart-side { height: 260px; }
+  }
+}
+
+@media (max-width: #{$breakpoint-md}) {
+  .dashboard { padding: $spacing-md; }
+  .dashboard__kpi-grid  { grid-template-columns: 1fr 1fr; }
+  .dashboard__feed-grid { grid-template-columns: 1fr; }
+  .dashboard__chart-full { height: 220px; }
+}
+
+@media (max-width: #{$breakpoint-sm}) {
+  .dashboard__kpi-grid { grid-template-columns: 1fr; }
+  .dashboard__header   { flex-direction: column; align-items: flex-start; }
+}

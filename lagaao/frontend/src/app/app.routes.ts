@@ -41,7 +41,7 @@ export const routes: Routes = [
     ],
   },
 
-  // ─── Protected shell (requires login) ──────────────────────────────────────
+  // ─── Protected shell ────────────────────────────────────────────────────────
   {
     path: '',
     component: ShellComponent,
@@ -49,12 +49,14 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        loadComponent: () =>
-          import('./features/home/home.component').then((m) => m.HomeComponent),
+        loadChildren: () =>
+          import('./features/dashboard/dashboard.routes').then((m) => m.DASHBOARD_ROUTES),
       },
-      // ── Future protected routes (add here as built) ────────────────────
-      // { path: 'listings', ... }
-      // { path: 'admin', canActivate: [roleGuard], data: { roles: ['admin'] }, ... }
+      // ── Future protected routes ──────────────────────────────────────────
+      // { path: 'listings',     loadChildren: () => import('./features/listings/listings.routes').then(m => m.LISTINGS_ROUTES) },
+      // { path: 'users',        loadChildren: () => import('./features/users/users.routes').then(m => m.USERS_ROUTES) },
+      // { path: 'notifications',loadChildren: () => import('./features/notifications/notifications.routes').then(m => m.NOTIFICATIONS_ROUTES) },
+      // { path: 'admin',        canActivate: [roleGuard], data: { roles: ['admin','super_admin'] }, loadChildren: () => import('./features/admin/admin.routes').then(m => m.ADMIN_ROUTES) },
     ],
   },
 
