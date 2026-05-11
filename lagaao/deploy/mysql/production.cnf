@@ -1,0 +1,61 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# MySQL 8 Production Configuration
+# Place at: /etc/mysql/conf.d/lagaao-production.cnf
+# Restart:  systemctl restart mysql
+# ─────────────────────────────────────────────────────────────────────────────
+
+[mysqld]
+
+# ─── Character set ────────────────────────────────────────────────────────────
+character-set-server  = utf8mb4
+collation-server      = utf8mb4_unicode_ci
+
+# ─── Networking ───────────────────────────────────────────────────────────────
+bind-address          = 127.0.0.1      # no external connections
+port                  = 3306
+max_connections       = 200
+max_connect_errors    = 100
+
+# ─── InnoDB ───────────────────────────────────────────────────────────────────
+# Set to ~70% of available RAM (e.g. 1.4G for 2G VPS, 2.8G for 4G VPS)
+innodb_buffer_pool_size   = 512M
+innodb_buffer_pool_instances = 1
+innodb_log_file_size      = 128M
+innodb_log_buffer_size    = 16M
+innodb_flush_method       = O_DIRECT
+innodb_flush_log_at_trx_commit = 1    # 1 = ACID safe, 2 = faster (lose last second on crash)
+innodb_file_per_table     = ON
+
+# ─── Query cache (MySQL 8 removes this — left for reference) ─────────────────
+# query_cache_type = 0
+
+# ─── Slow query log ───────────────────────────────────────────────────────────
+slow_query_log            = 1
+slow_query_log_file       = /var/log/mysql/slow.log
+long_query_time           = 1          # log queries > 1 second
+log_queries_not_using_indexes = 0
+
+# ─── General security ─────────────────────────────────────────────────────────
+local_infile              = 0
+symbolic-links            = 0
+
+# ─── Timeouts ─────────────────────────────────────────────────────────────────
+wait_timeout              = 600
+interactive_timeout       = 600
+connect_timeout           = 10
+
+# ─── Temp tables ──────────────────────────────────────────────────────────────
+tmp_table_size            = 64M
+max_heap_table_size       = 64M
+
+# ─── Binary log (for point-in-time recovery) ──────────────────────────────────
+log_bin                   = /var/log/mysql/mysql-bin.log
+expire_logs_days          = 7
+max_binlog_size           = 100M
+binlog_format             = ROW
+
+[client]
+default-character-set = utf8mb4
+
+[mysql]
+default-character-set = utf8mb4

@@ -1,0 +1,35 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Logrotate config for Lagaao
+# Place at: /etc/logrotate.d/lagaao
+# ─────────────────────────────────────────────────────────────────────────────
+
+/var/log/lagaao/*.log {
+    daily
+    rotate 30
+    compress
+    delaycompress
+    missingok
+    notifempty
+    create 0640 deploy deploy
+    sharedscripts
+    postrotate
+        # Signal PM2 to reopen log files
+        su - deploy -c "pm2 reloadLogs" 2>/dev/null || true
+    endscript
+}
+
+/var/log/nginx/lagaao.*.log {
+    daily
+    rotate 30
+    compress
+    delaycompress
+    missingok
+    notifempty
+    create 0640 www-data adm
+    sharedscripts
+    postrotate
+        if [ -f /var/run/nginx.pid ]; then
+            kill -USR1 $(cat /var/run/nginx.pid)
+        fi
+    endscript
+}
