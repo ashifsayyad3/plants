@@ -1,0 +1,124 @@
+<!-- Drop zone target -->
+<div class="upload-zone"
+  [class.upload-zone--dragging]="isDragging()"
+  [class.upload-zone--compact]="compact()"
+  [class.upload-zone--disabled]="disabled()"
+  [class.upload-zone--has-files]="totalCount() > 0">
+
+  <!-- ── Empty / drop area ───────────────────────────────────────────────── -->
+  @if (totalCount() === 0) {
+    <label class="upload-zone__drop-area" [class.upload-zone__drop-area--compact]="compact()">
+      <input
+        type="file"
+        [multiple]="multiple()"
+        [accept]="acceptAttr()"
+        [disabled]="disabled()"
+        (change)="onFileSelected($event)"
+        hidden />
+
+      <mat-icon class="upload-zone__cloud-icon">cloud_upload</mat-icon>
+
+      @if (!compact()) {
+        <span class="upload-zone__label">{{ label() }}</span>
+        <span class="upload-zone__hint">
+          Max {{ maxSizeMb() }} MB per file · {{ acceptAttr() }}
+        </span>
+      } @else {
+        <span class="upload-zone__label--sm">Click or drop</span>
+      }
+    </label>
+  }
+
+  <!-- ── File list ────────────────────────────────────────────────────────── -->
+  @if (totalCount() > 0) {
+    <div class="upload-zone__file-list">
+
+      @for (item of items(); track item.id) {
+        <div class="upload-item"
+          [class.upload-item--done]="item.status === 'done'"
+          [class.upload-item--error]="item.status === 'error'"
+          [class.upload-item--uploading]="item.status === 'uploading'">
+
+          <!-- Preview / icon -->
+          <div class="upload-item__thumb">
+            @if (item.preview) {
+              <img [src]="item.preview" [alt]="item.file.name" class="upload-item__img" />
+            } @else {
+              <mat-icon class="upload-item__icon">{{ fileIcon(item.file.type) }}</mat-icon>
+            }
+
+            <!-- Status overlay -->
+            @if (item.status === 'done') {
+              <div class="upload-item__overlay upload-item__overlay--done">
+                <mat-icon>check_circle</mat-icon>
+              </div>
+            }
+            @if (item.status === 'error') {
+              <div class="upload-item__overlay upload-item__overlay--error">
+                <mat-icon>error</mat-icon>
+              </div>
+            }
+          </div>
+
+          <!-- Info -->
+          <div class="upload-item__info">
+            <span class="upload-item__name" [matTooltip]="item.file.name">{{ item.file.name }}</span>
+            <span class="upload-item__size">{{ formatBytes(item.file.size) }}</span>
+
+            @if (item.status === 'uploading') {
+              <mat-progress-bar
+                mode="determinate"
+                [value]="item.progress"
+                class="upload-item__progress" />
+            }
+            @if (item.status === 'error' && item.error) {
+              <span class="upload-item__error">{{ item.error }}</span>
+            }
+          </div>
+
+          <!-- Actions -->
+          <div class="upload-item__actions">
+            @if (item.status === 'error') {
+              <button mat-icon-button matTooltip="Retry" (click)="retryItem(item.id)">
+                <mat-icon>refresh</mat-icon>
+              </button>
+            }
+            @if (item.status === 'done' && item.record) {
+              <a mat-icon-button matTooltip="Open" [href]="item.record.url" target="_blank">
+                <mat-icon>open_in_new</mat-icon>
+              </a>
+            }
+            <button mat-icon-button matTooltip="Remove" (click)="removeItem(item.id)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+
+        </div>
+      }
+
+    </div>
+
+    <!-- ── Add more / summary ──────────────────────────────────────────────── -->
+    <div class="upload-zone__footer">
+      <span class="upload-zone__summary">
+        {{ doneCount() }} done
+        @if (uploadingCount() > 0) { · {{ uploadingCount() }} uploading }
+        @if (errorCount() > 0)     { · {{ errorCount() }} failed }
+      </span>
+
+      <div class="upload-zone__footer-actions">
+        @if (totalCount() < maxCount() && multiple()) {
+          <label class="add-more-btn">
+            <input type="file" [multiple]="multiple()" [accept]="acceptAttr()"
+              (change)="onFileSelected($event)" hidden [disabled]="disabled()" />
+            <mat-icon>add</mat-icon> Add more
+          </label>
+        }
+        @if (totalCount() > 0) {
+          <button mat-button (click)="clearAll()">Clear all</button>
+        }
+      </div>
+    </div>
+  }
+
+</div>

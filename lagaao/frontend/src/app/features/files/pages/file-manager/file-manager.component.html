@@ -1,0 +1,52 @@
+<app-page-header
+  title="File Manager"
+  subtitle="Upload and manage your files"
+  [actions]="[{ label: showUpload() ? 'Hide Upload' : 'Upload Files', icon: 'upload', action: toggleUpload.bind(this) }]"
+/>
+
+<!-- Upload zone (collapsible) -->
+@if (showUpload()) {
+  <div class="fm-upload-wrap">
+    <app-upload-zone
+      collection="general"
+      [maxFiles]="10"
+      (uploaded)="onUploaded($event)"
+    />
+  </div>
+}
+
+<!-- Toolbar -->
+<div class="fm-toolbar">
+  <mat-form-field appearance="outline" class="fm-collection-select">
+    <mat-label>Collection</mat-label>
+    <mat-select [(ngModel)]="collectionValue">
+      @for (col of collections(); track col.key) {
+        <mat-option [value]="col.key">{{ col.label }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <span class="fm-count">{{ filteredFiles().length }} file(s)</span>
+
+  <button mat-icon-button [matTooltip]="layout() === 'grid' ? 'List view' : 'Grid view'" (click)="toggleLayout()">
+    <mat-icon>{{ layout() === 'grid' ? 'view_list' : 'grid_view' }}</mat-icon>
+  </button>
+
+  <button mat-icon-button matTooltip="Refresh" (click)="loadFiles()">
+    <mat-icon>refresh</mat-icon>
+  </button>
+</div>
+
+<!-- Files -->
+@if (loading()) {
+  <div class="fm-loading">
+    <mat-spinner diameter="40" />
+  </div>
+} @else {
+  <app-file-preview
+    [files]="filteredFiles()"
+    [layout]="layout()"
+    [deletable]="true"
+    (deleted)="onFileDeleted($event)"
+  />
+}

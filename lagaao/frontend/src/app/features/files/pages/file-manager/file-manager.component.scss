@@ -1,0 +1,29 @@
+@use '../../../../../../styles/variables' as *;
+
+.fm-upload-wrap {
+  margin-bottom: $spacing-lg;
+}
+
+.fm-toolbar {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-md;
+  flex-wrap: wrap;
+}
+
+.fm-collection-select {
+  width: 200px;
+}
+
+.fm-count {
+  flex: 1;
+  font-size: $font-size-sm;
+  color: var(--text-muted);
+}
+
+.fm-loading {
+  display: flex;
+  justify-content: center;
+  padding: $spacing-xl;
+}

@@ -25,6 +25,11 @@ export const NAV_ITEMS: NavItem[] = [
     roles: ['admin', 'super_admin'],
   },
   {
+    label: 'Files',
+    icon:  'folder',
+    route: '/files',
+  },
+  {
     label: 'Notifications',
     icon:  'notifications',
     route: '/notifications',

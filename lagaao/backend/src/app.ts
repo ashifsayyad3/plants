@@ -4,6 +4,7 @@ import cors        from 'cors';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import rateLimit   from 'express-rate-limit';
+import path        from 'path';
 import { env }                   from './config/env';
 import { morganMiddleware }      from './middleware/morgan.middleware';
 import { requestIdMiddleware }   from './middleware/request-id.middleware';
@@ -11,6 +12,9 @@ import { globalErrorHandler, notFoundHandler } from './middleware/error.middlewa
 import { CONSTANTS }             from './config/constants';
 import { loadRoutes }            from './routes/index';
 import { setupSwagger }          from './utils/swagger.util';
+import { UPLOAD_ROOT, PUBLIC_UPLOAD_PREFIX } from './config/upload.config';
+import { ensureDir }             from './middleware/upload.middleware';
+import { startCleanupJob }       from './utils/cleanup.util';
 
 export function createApp(): Application {
   const app = express();
@@ -63,6 +67,26 @@ export function createApp(): Application {
 
   // ─── HTTP Access Logging ──────────────────────────────────────────────────
   app.use(morganMiddleware);
+
+  // ─── Static file serving (public uploads only) ───────────────────────────
+  ensureDir(UPLOAD_ROOT);
+  app.use(
+    PUBLIC_UPLOAD_PREFIX,
+    express.static(UPLOAD_ROOT, {
+      maxAge:   '7d',
+      etag:     true,
+      dotfiles: 'deny',
+      setHeaders: (res, filePath) => {
+        // Prevent scripts from being executed via direct URL
+        if (!filePath.match(/\.(jpg|jpeg|png|webp|gif|pdf|svg)$/i)) {
+          res.setHeader('Content-Disposition', 'attachment');
+        }
+      },
+    }),
+  );
+
+  // ─── Background jobs ──────────────────────────────────────────────────────
+  startCleanupJob();
 
   // ─── Swagger Docs ─────────────────────────────────────────────────────────
   setupSwagger(app);
