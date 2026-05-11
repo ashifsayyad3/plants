@@ -1,0 +1,150 @@
+@use '../../../../../../styles/variables' as *;
+
+.user-list {
+  padding: $spacing-lg;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+// ─── Filters ──────────────────────────────────────────────────────────────────
+.user-list__filters {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  flex-wrap: wrap;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: var(--surface-card);
+  border: 1px solid var(--surface-border);
+  border-radius: $radius-md;
+  padding: 0 $spacing-sm;
+  gap: $spacing-xs;
+  flex: 1;
+  min-width: 220px;
+  max-width: 380px;
+  transition: border-color $transition-fast;
+  &:focus-within { border-color: var(--color-primary); }
+}
+.search-box__icon  { color: var(--text-muted); font-size: 20px; }
+.search-box__input {
+  flex: 1; border: none; outline: none; background: transparent;
+  color: var(--text-primary); font-size: $font-size-sm;
+  padding: 10px 0;
+  &::placeholder { color: var(--text-muted); }
+}
+
+.user-list__filter-select { width: 160px; }
+.user-list__filter-actions { display: flex; gap: $spacing-xs; margin-left: auto; }
+
+// ─── Table ────────────────────────────────────────────────────────────────────
+.user-list__table-wrap {
+  background: var(--surface-card);
+  border: 1px solid var(--surface-border);
+  border-radius: $radius-lg;
+  overflow: hidden;
+}
+
+.user-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th, td {
+    padding: $spacing-sm $spacing-md;
+    text-align: left;
+    border-bottom: 1px solid var(--surface-divider);
+  }
+
+  th {
+    background: var(--surface-hover);
+    font-size: $font-size-sm;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  tbody tr {
+    transition: background $transition-fast;
+    cursor: pointer;
+    &:hover { background: var(--surface-hover); }
+    &.selected { background: rgba(92,53,199,.06); }
+  }
+
+  .skeleton-row { cursor: default; pointer-events: none; }
+}
+
+.sortable {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  .sort-icon { font-size: 16px; width: 16px; height: 16px; color: var(--text-muted); }
+}
+
+.col-check   { width: 48px; }
+.col-status  { width: 100px; }
+.col-roles   { width: 160px; }
+.col-login   { width: 120px; }
+.col-created { width: 100px; }
+.col-actions { width: 60px; text-align: right; }
+
+// ─── User cell ────────────────────────────────────────────────────────────────
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+}
+.user-cell__info { display: flex; flex-direction: column; min-width: 0; }
+.user-cell__name  { font-size: $font-size-sm; font-weight: 500; color: var(--text-primary); }
+.user-cell__email { font-size: 11px; color: var(--text-muted); }
+.user-cell__phone { font-size: 11px; color: var(--text-muted); }
+
+// ─── Role chips ────────────────────────────────────────────────────────────────
+.role-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.role-chip {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: $radius-full;
+  font-size: 11px;
+  font-weight: 500;
+  background: rgba(92,53,199,.12);
+  color: var(--color-primary);
+  white-space: nowrap;
+  &--more { background: var(--surface-hover); color: var(--text-muted); }
+}
+
+// ─── Context menu danger ──────────────────────────────────────────────────────
+.menu-danger { color: var(--status-danger-text) !important; }
+
+// ─── Pagination ───────────────────────────────────────────────────────────────
+.user-list__pagination {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  padding: $spacing-sm 0;
+  flex-wrap: wrap;
+}
+.pagination-info    { font-size: $font-size-sm; color: var(--text-muted); }
+.pagination-controls { display: flex; align-items: center; gap: $spacing-xs; margin-left: auto; }
+.pagination-page    { font-size: $font-size-sm; color: var(--text-secondary); white-space: nowrap; }
+.pagination-limit   { width: 110px; }
+
+.text-muted { font-size: $font-size-sm; color: var(--text-muted); }
+
+// ─── Responsive ───────────────────────────────────────────────────────────────
+@media (max-width: #{$breakpoint-lg}) {
+  .col-login, .col-created { display: none; }
+}
+@media (max-width: #{$breakpoint-md}) {
+  .user-list { padding: $spacing-md; }
+  .col-roles  { display: none; }
+  .user-list__filter-select { display: none; }
+}

@@ -1,0 +1,129 @@
+@use '../../../../../../styles/variables' as *;
+
+.user-detail, .detail-loading {
+  padding: $spacing-lg;
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+
+// ─── Hero ─────────────────────────────────────────────────────────────────────
+.detail-hero {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-lg;
+  background: var(--surface-card);
+  border: 1px solid var(--surface-border);
+  border-radius: $radius-lg;
+  padding: $spacing-lg;
+  flex-wrap: wrap;
+
+  &--skeleton { min-height: 100px; }
+}
+
+.detail-hero__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+  min-width: 0;
+}
+
+.detail-hero__name  { margin: 0; font-size: $font-size-lg; font-weight: 700; color: var(--text-primary); }
+.detail-hero__email { font-size: $font-size-sm; color: var(--text-muted); }
+.detail-hero__badges { display: flex; align-items: center; gap: $spacing-sm; margin-top: $spacing-xs; flex-wrap: wrap; }
+
+.verified-badge {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 11px; font-weight: 600;
+  color: var(--status-success-text);
+  mat-icon { font-size: 14px; width: 14px; height: 14px; }
+}
+
+.detail-hero__meta {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.meta-item {
+  display: flex; align-items: center; gap: $spacing-xs;
+  font-size: $font-size-sm; color: var(--text-muted);
+  mat-icon { font-size: 16px; width: 16px; height: 16px; }
+}
+
+.detail-hero__actions { display: flex; flex-direction: column; gap: $spacing-sm; flex-shrink: 0; }
+
+// ─── Tabs ─────────────────────────────────────────────────────────────────────
+.detail-tabs {
+  background: var(--surface-card);
+  border: 1px solid var(--surface-border);
+  border-radius: $radius-lg;
+  overflow: hidden;
+}
+
+.tab-content {
+  padding: $spacing-lg;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.section-title { margin: 0; font-size: $font-size-base; font-weight: 600; color: var(--text-primary); }
+.section-desc  { margin: 0; font-size: $font-size-sm; color: var(--text-muted); }
+.section-divider { margin: $spacing-lg 0; }
+
+// ─── Forms ────────────────────────────────────────────────────────────────────
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-md;
+  mat-form-field { width: 100%; }
+}
+
+.form-actions { display: flex; gap: $spacing-sm; }
+
+// ─── Activity ─────────────────────────────────────────────────────────────────
+.activity-list { display: flex; flex-direction: column; }
+
+.activity-row {
+  display: flex;
+  gap: $spacing-sm;
+  padding: $spacing-sm 0;
+  border-bottom: 1px solid var(--surface-divider);
+  &:last-child { border-bottom: none; }
+  &--skeleton { pointer-events: none; padding: $spacing-sm; gap: $spacing-sm; }
+}
+
+.activity-icon {
+  width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--surface-hover);
+  mat-icon { font-size: 18px; width: 18px; height: 18px; color: var(--text-muted); }
+}
+
+.activity-body { flex: 1; min-width: 0; }
+.activity-action { font-size: $font-size-sm; color: var(--text-primary); }
+.activity-meta   { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.activity-values {
+  font-size: 11px; background: var(--surface-hover); border-radius: $radius-sm;
+  padding: $spacing-xs $spacing-sm; margin: 4px 0 0; overflow-x: auto;
+  color: var(--text-secondary); white-space: pre-wrap; word-break: break-all;
+}
+
+// ─── Roles ────────────────────────────────────────────────────────────────────
+.perm-chips { display: flex; flex-wrap: wrap; gap: $spacing-xs; }
+.role-chip {
+  display: inline-block; padding: 3px 12px;
+  border-radius: $radius-full; font-size: $font-size-sm; font-weight: 500;
+  &--primary { background: rgba(92,53,199,.12); color: var(--color-primary); }
+}
+.text-muted { color: var(--text-muted); font-size: $font-size-sm; }
+
+// ─── Responsive ───────────────────────────────────────────────────────────────
+@media (max-width: #{$breakpoint-md}) {
+  .detail-hero { flex-direction: column; }
+  .form-grid   { grid-template-columns: 1fr; }
+}

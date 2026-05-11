@@ -1,0 +1,241 @@
+<div class="user-list">
+
+  <app-page-header title="User Management" subtitle="Manage users, roles, and permissions" [actions]="pageActions" />
+
+  <!-- ── Bulk toolbar ─────────────────────────────────────────────────────── -->
+  <app-bulk-action-toolbar
+    [count]="store.selectedCount()"
+    (action)="store.bulkAction($event)"
+    (clear)="store.clearSelection()" />
+
+  <!-- ── Filters ──────────────────────────────────────────────────────────── -->
+  <div class="user-list__filters">
+    <!-- Search -->
+    <div class="search-box">
+      <mat-icon class="search-box__icon">search</mat-icon>
+      <input
+        class="search-box__input"
+        type="text"
+        placeholder="Search by name, email, phone…"
+        [value]="searchInput()"
+        (input)="onSearch($any($event.target).value)" />
+      @if (searchInput()) {
+        <button mat-icon-button (click)="onSearch('')"><mat-icon>close</mat-icon></button>
+      }
+    </div>
+
+    <!-- Status filter -->
+    <mat-form-field appearance="outline" class="user-list__filter-select">
+      <mat-label>Status</mat-label>
+      <mat-select
+        [value]="store.filter().status"
+        (selectionChange)="store.setFilter({ status: $event.value })">
+        @for (opt of statusOptions; track opt.value) {
+          <mat-option [value]="opt.value">{{ opt.label }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Role filter -->
+    <mat-form-field appearance="outline" class="user-list__filter-select">
+      <mat-label>Role</mat-label>
+      <mat-select
+        [value]="store.filter().roleId"
+        (selectionChange)="store.setFilter({ roleId: $event.value })">
+        <mat-option [value]="''">All Roles</mat-option>
+        @for (role of store.roles(); track role.id) {
+          <mat-option [value]="role.id">{{ role.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <div class="user-list__filter-actions">
+      <button mat-stroked-button (click)="store.resetFilter()" matTooltip="Clear all filters">
+        <mat-icon>filter_alt_off</mat-icon>
+      </button>
+      <button mat-stroked-button (click)="store.exportCsv()" matTooltip="Export CSV">
+        <mat-icon>download</mat-icon> Export
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Table ────────────────────────────────────────────────────────────── -->
+  <div class="user-list__table-wrap">
+    <table class="user-table">
+      <thead>
+        <tr>
+          <th class="col-check">
+            <mat-checkbox
+              [checked]="store.allSelected()"
+              [indeterminate]="store.selectedCount() > 0 && !store.allSelected()"
+              (change)="store.toggleAll()">
+            </mat-checkbox>
+          </th>
+          <th class="col-user sortable" (click)="onSort('name')">
+            User <mat-icon class="sort-icon">{{ sortIcon('name') }}</mat-icon>
+          </th>
+          <th class="col-status">Status</th>
+          <th class="col-roles">Roles</th>
+          <th class="col-login sortable" (click)="onSort('lastLoginAt')">
+            Last Login <mat-icon class="sort-icon">{{ sortIcon('lastLoginAt') }}</mat-icon>
+          </th>
+          <th class="col-created sortable" (click)="onSort('createdAt')">
+            Joined <mat-icon class="sort-icon">{{ sortIcon('createdAt') }}</mat-icon>
+          </th>
+          <th class="col-actions"></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @if (store.loading()) {
+          @for (_ of skeletonRows; track $index) {
+            <tr class="skeleton-row">
+              <td><app-skeleton width="18px" height="18px" /></td>
+              <td>
+                <div class="user-cell">
+                  <app-skeleton width="36px" height="36px" radius="50%" />
+                  <div>
+                    <app-skeleton height="14px" width="120px" />
+                    <app-skeleton height="11px" width="160px" />
+                  </div>
+                </div>
+              </td>
+              <td><app-skeleton height="22px" width="60px" radius="999px" /></td>
+              <td><app-skeleton height="22px" width="80px" radius="999px" /></td>
+              <td><app-skeleton height="14px" width="80px" /></td>
+              <td><app-skeleton height="14px" width="80px" /></td>
+              <td><app-skeleton height="32px" width="32px" radius="50%" /></td>
+            </tr>
+          }
+        } @else if (store.users().length === 0) {
+          <tr>
+            <td colspan="7">
+              <app-empty-state
+                icon="people"
+                title="No users found"
+                message="Try adjusting your filters or create a new user"
+                actionLabel="Add User"
+                (action)="router.navigate(['/users/create'])" />
+            </td>
+          </tr>
+        } @else {
+          @for (user of store.users(); track user.uuid) {
+            <tr [class.selected]="store.isSelected(user.uuid)" (click)="navigateTo(user.uuid)">
+
+              <td class="col-check" (click)="$event.stopPropagation()">
+                <mat-checkbox
+                  [checked]="store.isSelected(user.uuid)"
+                  (change)="store.toggleRow(user.uuid)">
+                </mat-checkbox>
+              </td>
+
+              <td>
+                <div class="user-cell">
+                  <app-avatar
+                    [src]="user.meta?.avatarUrl ?? null"
+                    [name]="user.name"
+                    [size]="36" />
+                  <div class="user-cell__info">
+                    <span class="user-cell__name">{{ user.name }}</span>
+                    <span class="user-cell__email">{{ user.email }}</span>
+                    @if (user.phone) {
+                      <span class="user-cell__phone">{{ user.phone }}</span>
+                    }
+                  </div>
+                </div>
+              </td>
+
+              <td>
+                <app-status-badge [value]="user.status" [config]="statusBadgeConfig" />
+              </td>
+
+              <td>
+                <div class="role-chips">
+                  @for (role of user.roles.slice(0, 2); track role.id) {
+                    <span class="role-chip">{{ role.name }}</span>
+                  }
+                  @if (user.roles.length > 2) {
+                    <span class="role-chip role-chip--more">+{{ user.roles.length - 2 }}</span>
+                  }
+                </div>
+              </td>
+
+              <td class="text-muted">
+                {{ user.lastLoginAt ? (user.lastLoginAt | timeAgo) : 'Never' }}
+              </td>
+
+              <td class="text-muted">
+                {{ user.createdAt | timeAgo }}
+              </td>
+
+              <td class="col-actions" (click)="$event.stopPropagation()">
+                <button mat-icon-button [matMenuTriggerFor]="rowMenu" aria-label="Actions">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #rowMenu="matMenu">
+                  <button mat-menu-item (click)="navigateTo(user.uuid)">
+                    <mat-icon>visibility</mat-icon><span>View Profile</span>
+                  </button>
+                  @if (user.status !== 'active') {
+                    <button mat-menu-item (click)="store.changeStatus(user.uuid, 'active')">
+                      <mat-icon>check_circle</mat-icon><span>Activate</span>
+                    </button>
+                  }
+                  @if (user.status === 'active') {
+                    <button mat-menu-item (click)="store.changeStatus(user.uuid, 'inactive')">
+                      <mat-icon>pause_circle</mat-icon><span>Deactivate</span>
+                    </button>
+                  }
+                  @if (user.status !== 'banned') {
+                    <button mat-menu-item (click)="store.changeStatus(user.uuid, 'banned')">
+                      <mat-icon>block</mat-icon><span>Ban User</span>
+                    </button>
+                  }
+                  <mat-divider />
+                  <button mat-menu-item class="menu-danger" (click)="store.deleteUser(user.uuid)">
+                    <mat-icon>delete</mat-icon><span>Delete</span>
+                  </button>
+                </mat-menu>
+              </td>
+
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── Pagination ────────────────────────────────────────────────────────── -->
+  @if (store.meta(); as meta) {
+    @if (meta.totalPages > 1) {
+      <div class="user-list__pagination">
+        <span class="pagination-info">
+          Showing {{ (meta.page - 1) * meta.limit + 1 }}–{{ meta.page * meta.limit > meta.total ? meta.total : meta.page * meta.limit }} of {{ meta.total }} users
+        </span>
+
+        <div class="pagination-controls">
+          <button mat-icon-button [disabled]="!meta.hasPrevPage" (click)="store.setPage(meta.page - 1)">
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+
+          <span class="pagination-page">{{ meta.page }} / {{ meta.totalPages }}</span>
+
+          <button mat-icon-button [disabled]="!meta.hasNextPage" (click)="store.setPage(meta.page + 1)">
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+        </div>
+
+        <mat-form-field appearance="outline" class="pagination-limit">
+          <mat-label>Per page</mat-label>
+          <mat-select [value]="store.filter().limit" (selectionChange)="store.setFilter({ limit: $event.value })">
+            <mat-option [value]="10">10</mat-option>
+            <mat-option [value]="15">15</mat-option>
+            <mat-option [value]="25">25</mat-option>
+            <mat-option [value]="50">50</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    }
+  }
+
+</div>

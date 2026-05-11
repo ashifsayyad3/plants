@@ -1,0 +1,221 @@
+@if (loading()) {
+  <div class="detail-loading">
+    <div class="detail-hero detail-hero--skeleton">
+      <app-skeleton width="72px" height="72px" radius="50%" />
+      <div>
+        <app-skeleton height="24px" width="200px" />
+        <app-skeleton height="14px" width="160px" />
+      </div>
+    </div>
+  </div>
+} @else if (user(); as u) {
+  <div class="user-detail">
+
+    <!-- ── Hero ──────────────────────────────────────────────────────────── -->
+    <div class="detail-hero">
+      <app-user-avatar
+        [uuid]="u.uuid"
+        [name]="u.name"
+        [avatarUrl]="u.meta?.avatarUrl ?? null"
+        [size]="72"
+        [editable]="true"
+        (updated)="onAvatarUpdated($event)" />
+
+      <div class="detail-hero__info">
+        <h1 class="detail-hero__name">{{ u.name }}</h1>
+        <span class="detail-hero__email">{{ u.email }}</span>
+        <div class="detail-hero__badges">
+          <app-status-badge [value]="u.status" [config]="statusBadgeConfig" />
+          @if (u.emailVerifiedAt) {
+            <span class="verified-badge"><mat-icon>verified</mat-icon> Email Verified</span>
+          }
+        </div>
+      </div>
+
+      <div class="detail-hero__meta">
+        <div class="meta-item">
+          <mat-icon>access_time</mat-icon>
+          <span>Last login: {{ u.lastLoginAt ? (u.lastLoginAt | timeAgo) : 'Never' }}</span>
+        </div>
+        <div class="meta-item">
+          <mat-icon>calendar_today</mat-icon>
+          <span>Joined: {{ u.createdAt | date:'mediumDate' }}</span>
+        </div>
+        @if (u.lastLoginIp) {
+          <div class="meta-item">
+            <mat-icon>location_on</mat-icon>
+            <span>IP: {{ u.lastLoginIp }}</span>
+          </div>
+        }
+      </div>
+
+      <div class="detail-hero__actions">
+        <button mat-stroked-button routerLink="/users">
+          <mat-icon>arrow_back</mat-icon> Back
+        </button>
+        <button mat-stroked-button color="warn" (click)="deleteUser()">
+          <mat-icon>delete</mat-icon> Delete
+        </button>
+      </div>
+    </div>
+
+    <!-- ── Tabs ──────────────────────────────────────────────────────────── -->
+    <mat-tab-group animationDuration="200ms" class="detail-tabs">
+
+      <!-- Profile Tab -->
+      <mat-tab label="Profile">
+        <div class="tab-content">
+          <form [formGroup]="form" class="detail-form">
+            <h3 class="section-title">Basic Information</h3>
+            <div class="form-grid">
+              <mat-form-field appearance="outline">
+                <mat-label>Full Name</mat-label>
+                <input matInput formControlName="name" />
+                @if (form.get('name')?.invalid && form.get('name')?.touched) {
+                  <mat-error>Name is required (2–100 chars)</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Email Address</mat-label>
+                <input matInput [value]="u.email" readonly />
+                <mat-icon matSuffix matTooltip="Email cannot be changed">lock</mat-icon>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Phone</mat-label>
+                <input matInput formControlName="phone" />
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Status</mat-label>
+                <mat-select formControlName="status">
+                  <mat-option value="active">Active</mat-option>
+                  <mat-option value="inactive">Inactive</mat-option>
+                  <mat-option value="pending">Pending</mat-option>
+                  <mat-option value="banned">Banned</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="form-actions">
+              <button mat-flat-button color="primary" [disabled]="saving() || form.invalid" (click)="saveProfile()">
+                {{ saving() ? 'Saving…' : 'Save Changes' }}
+              </button>
+              <button mat-stroked-button color="primary" [disabled]="saving()" (click)="saveStatus()">
+                Update Status
+              </button>
+            </div>
+          </form>
+
+          <mat-divider class="section-divider" />
+
+          <!-- Change Password -->
+          <form [formGroup]="pwForm" class="detail-form">
+            <h3 class="section-title">Change Password</h3>
+            <div class="form-grid">
+              <mat-form-field appearance="outline">
+                <mat-label>New Password</mat-label>
+                <input matInput formControlName="newPassword" [type]="showPassword() ? 'text' : 'password'" />
+                <button mat-icon-button matSuffix type="button" (click)="showPassword.update(v => !v)">
+                  <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+                @if (pwForm.get('newPassword')?.errors?.['minlength']) {
+                  <mat-error>Minimum 8 characters</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Confirm Password</mat-label>
+                <input matInput formControlName="confirmPassword" type="password" />
+                @if (pwForm.errors?.['mismatch'] && pwForm.get('confirmPassword')?.touched) {
+                  <mat-error>Passwords do not match</mat-error>
+                }
+              </mat-form-field>
+            </div>
+            <div class="form-actions">
+              <button mat-flat-button color="accent" [disabled]="saving() || pwForm.invalid" (click)="changePassword()">
+                {{ saving() ? 'Saving…' : 'Change Password' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </mat-tab>
+
+      <!-- Roles Tab -->
+      <mat-tab label="Roles & Access">
+        <div class="tab-content">
+          <h3 class="section-title">Assigned Roles</h3>
+          <p class="section-desc">Changes take effect on the user's next login.</p>
+
+          <app-role-selector
+            [allRoles]="roles()"
+            [selectedIds]="selectedRoleIds()"
+            (changed)="selectedRoleIds.set($event)" />
+
+          <div class="form-actions">
+            <button mat-flat-button color="primary" [disabled]="savingRoles()" (click)="saveRoles()">
+              {{ savingRoles() ? 'Saving…' : 'Update Roles' }}
+            </button>
+          </div>
+
+          <mat-divider class="section-divider" />
+
+          <!-- Current permissions summary -->
+          <h3 class="section-title">Effective Permissions</h3>
+          <div class="perm-chips">
+            @for (role of u.roles; track role.id) {
+              <span class="role-chip role-chip--primary">{{ role.name }}</span>
+            }
+            @if (u.roles.length === 0) {
+              <p class="text-muted">No roles assigned</p>
+            }
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Activity Tab -->
+      <mat-tab label="Activity Log">
+        <div class="tab-content">
+          @if (loadingActivity()) {
+            @for (_ of [1,2,3,4,5]; track $index) {
+              <div class="activity-row activity-row--skeleton">
+                <app-skeleton width="34px" height="34px" radius="50%" />
+                <div>
+                  <app-skeleton height="14px" width="240px" />
+                  <app-skeleton height="11px" width="100px" />
+                </div>
+              </div>
+            }
+          } @else if (activity().length === 0) {
+            <p class="text-muted" style="padding: 24px 0">No activity recorded.</p>
+          } @else {
+            <div class="activity-list">
+              @for (log of activity(); track log.id) {
+                <div class="activity-row">
+                  <div class="activity-icon">
+                    <mat-icon>radio_button_unchecked</mat-icon>
+                  </div>
+                  <div class="activity-body">
+                    <span class="activity-action">
+                      <strong>{{ log.action }}</strong>
+                      @if (log.subjectType) { in {{ log.subjectType }} }
+                    </span>
+                    <div class="activity-meta">
+                      {{ log.createdAt | timeAgo }}
+                      @if (log.ipAddress) { · {{ log.ipAddress }} }
+                    </div>
+                    @if (log.newValues) {
+                      <pre class="activity-values">{{ log.newValues | json }}</pre>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
+  </div>
+}

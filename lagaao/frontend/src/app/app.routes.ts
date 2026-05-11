@@ -52,9 +52,12 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/dashboard/dashboard.routes').then((m) => m.DASHBOARD_ROUTES),
       },
+      {
+        path: 'users',
+        loadChildren: () => import('./features/users/users.routes').then((m) => m.USERS_ROUTES),
+      },
       // ── Future protected routes ──────────────────────────────────────────
       // { path: 'listings',     loadChildren: () => import('./features/listings/listings.routes').then(m => m.LISTINGS_ROUTES) },
-      // { path: 'users',        loadChildren: () => import('./features/users/users.routes').then(m => m.USERS_ROUTES) },
       // { path: 'notifications',loadChildren: () => import('./features/notifications/notifications.routes').then(m => m.NOTIFICATIONS_ROUTES) },
       // { path: 'admin',        canActivate: [roleGuard], data: { roles: ['admin','super_admin'] }, loadChildren: () => import('./features/admin/admin.routes').then(m => m.ADMIN_ROUTES) },
     ],
