@@ -10,6 +10,7 @@ import { UiStore }             from '../../core/store/ui.store';
 import { AuthService }         from '../../core/services/auth.service';
 import { ThemeService }        from '../../core/services/theme.service';
 import { AppStore }            from '../../core/store/app.store';
+import { NotificationBellComponent } from '../../features/notifications/components/notification-bell/notification-bell.component';
 
 @Component({
   selector: 'app-header',
@@ -17,6 +18,7 @@ import { AppStore }            from '../../core/store/app.store';
   imports: [
     RouterLink, MatIconModule, MatButtonModule, MatMenuModule,
     MatTooltipModule, MatBadgeModule, MatDividerModule,
+    NotificationBellComponent,
   ],
   templateUrl: './header.component.html',
   styleUrl:    './header.component.scss',

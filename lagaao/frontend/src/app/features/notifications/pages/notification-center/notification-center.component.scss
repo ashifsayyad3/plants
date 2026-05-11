@@ -1,0 +1,87 @@
+@use '../../../../../../styles/variables' as *;
+
+.nc-toolbar {
+  display: flex; align-items: center; gap: $spacing-sm;
+  margin-bottom: $spacing-md; flex-wrap: wrap;
+}
+.nc-channel-select { width: 180px; }
+.nc-unread-toggle  { display: flex; align-items: center; }
+.nc-spacer         { flex: 1; }
+
+.nc-list {
+  border: 1px solid var(--surface-border);
+  border-radius: $radius-md;
+  overflow: hidden;
+  background: var(--surface-card);
+}
+
+.nc-row {
+  display: grid;
+  grid-template-columns: 40px 48px 1fr 110px 150px 80px;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-sm $spacing-md;
+  border-bottom: 1px solid var(--surface-border);
+  transition: background .15s;
+
+  &:last-child { border-bottom: none; }
+  &:hover:not(.nc-row--header) { background: var(--surface-hover); }
+
+  &--header {
+    background: var(--surface-ground);
+    font-size: $font-size-sm; font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  &--unread { background: color-mix(in srgb, var(--color-primary) 4%, transparent); }
+
+  &--skeleton { pointer-events: none; }
+}
+
+.nc-check { justify-self: center; }
+
+.nc-icon {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  &--info    { background: var(--status-info-bg);    color: var(--status-info-text); }
+  &--success { background: var(--status-success-bg); color: var(--status-success-text); }
+  &--warning { background: var(--status-warning-bg); color: var(--status-warning-text); }
+  &--danger  { background: var(--status-danger-bg);  color: var(--status-danger-text); }
+  mat-icon { font-size: 16px; width: 16px; height: 16px; }
+}
+
+.nc-col { min-width: 0; }
+.nc-title {
+  font-size: $font-size-sm; font-weight: 500; color: var(--text-primary);
+  display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.nc-body {
+  font-size: 11px; color: var(--text-muted);
+  display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.nc-time { font-size: $font-size-sm; color: var(--text-muted); }
+.nc-col--actions { display: flex; gap: 0; justify-content: flex-end; }
+
+.nc-empty {
+  display: flex; flex-direction: column; align-items: center;
+  padding: $spacing-xl $spacing-lg; color: var(--text-muted);
+  mat-icon { font-size: 48px; width: 48px; height: 48px; }
+  p { margin: $spacing-xs 0 0; }
+}
+
+// Skeletons
+.nc-sk {
+  height: 16px; border-radius: 4px;
+  background: var(--surface-hover);
+  animation: pulse 1.4s ease-in-out infinite;
+  &--sm    { width: 32px; }
+  &--badge { width: 60px; }
+  &--title { width: 100%; }
+}
+@keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:.4 } }
+
+.nc-pagination {
+  display: flex; align-items: center; justify-content: center;
+  gap: $spacing-md; margin-top: $spacing-lg;
+}
+.nc-page-info { font-size: $font-size-sm; color: var(--text-muted); }

@@ -60,6 +60,16 @@ export const routes: Routes = [
         path: 'files',
         loadChildren: () => import('./features/files/files.routes').then((m) => m.FILES_ROUTES),
       },
+      {
+        path: 'notifications',
+        loadChildren: () =>
+          import('./features/notifications/notifications.routes').then((m) => m.NOTIFICATIONS_ROUTES),
+      },
+      {
+        path: 'admin/activity-log',
+        loadChildren: () =>
+          import('./features/activity-log/activity-log.routes').then((m) => m.ACTIVITY_LOG_ROUTES),
+      },
       // ── Future protected routes ──────────────────────────────────────────
       // { path: 'listings',     loadChildren: () => import('./features/listings/listings.routes').then(m => m.LISTINGS_ROUTES) },
       // { path: 'notifications',loadChildren: () => import('./features/notifications/notifications.routes').then(m => m.NOTIFICATIONS_ROUTES) },

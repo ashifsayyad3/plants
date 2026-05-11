@@ -1,0 +1,154 @@
+<app-page-header
+  title="Activity Log"
+  subtitle="Audit trail of all system actions"
+  [actions]="[{ label: 'Export CSV', icon: 'download', action: exportCsv.bind(this) }]"
+/>
+
+<!-- Filters -->
+<div class="al-filters">
+  <mat-form-field appearance="outline" class="al-search">
+    <mat-label>Search</mat-label>
+    <mat-icon matPrefix>search</mat-icon>
+    <input matInput [(ngModel)]="filters.search" (ngModelChange)="onSearch()" placeholder="Action, subject, IP…" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="al-field">
+    <mat-label>Subject type</mat-label>
+    <mat-select [(ngModel)]="filters.subjectType" (ngModelChange)="load(1)">
+      @for (t of subjectTypes; track t) {
+        <mat-option [value]="t">{{ t || 'All' }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="al-field al-field--date">
+    <mat-label>From</mat-label>
+    <input matInput type="datetime-local" [(ngModel)]="filters.from" (ngModelChange)="load(1)" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="al-field al-field--date">
+    <mat-label>To</mat-label>
+    <input matInput type="datetime-local" [(ngModel)]="filters.to" (ngModelChange)="load(1)" />
+  </mat-form-field>
+
+  <button mat-stroked-button (click)="resetFilters()">
+    <mat-icon>filter_alt_off</mat-icon> Reset
+  </button>
+
+  <span class="al-count">{{ total() }} entries</span>
+</div>
+
+<!-- Table -->
+<div class="al-table">
+
+  <!-- Header -->
+  <div class="al-row al-row--header">
+    <span class="al-col al-col--action">Action</span>
+    <span class="al-col al-col--user">User</span>
+    <span class="al-col al-col--subject">Subject</span>
+    <span class="al-col al-col--ip">IP</span>
+    <span class="al-col al-col--time">Time</span>
+    <span class="al-col al-col--expand"></span>
+  </div>
+
+  @if (loading()) {
+    @for (_ of [1,2,3,4,5,6,7,8]; track $index) {
+      <div class="al-row al-row--skeleton">
+        @for (w of ['80px','120px','100px','80px','100px']; track $index) {
+          <div class="al-sk" [style.width]="w"></div>
+        }
+      </div>
+    }
+  } @else if (logs().length === 0) {
+    <div class="al-empty">
+      <mat-icon>manage_search</mat-icon>
+      <p>No activity logs match your filters.</p>
+      <button mat-stroked-button (click)="resetFilters()">Clear filters</button>
+    </div>
+  } @else {
+    @for (log of logs(); track log.id) {
+      <div class="al-row" [class.al-row--expanded]="expandedId() === log.id">
+
+        <div class="al-col al-col--action">
+          <app-status-badge
+            [value]="formatAction(log.action)"
+            [variant]="actionVariant(log.action)"
+          />
+        </div>
+
+        <div class="al-col al-col--user">
+          @if (log.user) {
+            <span class="al-user-name">{{ log.user.name }}</span>
+            <span class="al-user-email">{{ log.user.email }}</span>
+          } @else {
+            <span class="al-muted">System</span>
+          }
+        </div>
+
+        <div class="al-col al-col--subject">
+          @if (log.subjectType) {
+            <span class="al-subject">{{ log.subjectType }}{{ log.subjectId ? ' #' + log.subjectId : '' }}</span>
+          } @else {
+            <span class="al-muted">—</span>
+          }
+        </div>
+
+        <div class="al-col al-col--ip">
+          <span class="al-ip">{{ log.ipAddress ?? '—' }}</span>
+        </div>
+
+        <div class="al-col al-col--time">
+          <span class="al-time" [matTooltip]="log.createdAt | date:'long'">
+            {{ log.createdAt | date:'MMM d, HH:mm:ss' }}
+          </span>
+        </div>
+
+        <div class="al-col al-col--expand">
+          <button mat-icon-button (click)="toggleExpand(log.id)" matTooltip="View details">
+            <mat-icon>{{ expandedId() === log.id ? 'expand_less' : 'expand_more' }}</mat-icon>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Expanded detail -->
+      @if (expandedId() === log.id) {
+        <div class="al-detail">
+          <div class="al-detail__grid">
+            <div class="al-detail__section">
+              <h4>Old Values</h4>
+              <pre>{{ (log.oldValues | json) ?? 'None' }}</pre>
+            </div>
+            <div class="al-detail__section">
+              <h4>New Values</h4>
+              <pre>{{ (log.newValues | json) ?? 'None' }}</pre>
+            </div>
+            <div class="al-detail__section">
+              <h4>Meta</h4>
+              <pre>{{ (log.meta | json) ?? 'None' }}</pre>
+            </div>
+            <div class="al-detail__section">
+              <h4>User Agent</h4>
+              <p class="al-detail__ua">{{ log.userAgent ?? '—' }}</p>
+              <h4 style="margin-top:8px">Request ID</h4>
+              <code>{{ log.requestId ?? '—' }}</code>
+            </div>
+          </div>
+        </div>
+      }
+    }
+  }
+</div>
+
+<!-- Pagination -->
+@if (totalPages() > 1) {
+  <div class="al-pagination">
+    <button mat-stroked-button [disabled]="!hasPrev()" (click)="load(page() - 1)">
+      <mat-icon>chevron_left</mat-icon> Prev
+    </button>
+    <span class="al-page-info">Page {{ page() }} of {{ totalPages() }}</span>
+    <button mat-stroked-button [disabled]="!hasMore()" (click)="load(page() + 1)">
+      Next <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
+}

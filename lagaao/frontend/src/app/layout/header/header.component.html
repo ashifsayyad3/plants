@@ -31,15 +31,7 @@
     </button>
 
     <!-- Notifications -->
-    <button mat-icon-button routerLink="/notifications"
-      matTooltip="Notifications" aria-label="Notifications">
-      <mat-icon
-        [matBadge]="unreadCount() > 0 ? unreadCount() : null"
-        matBadgeColor="warn"
-        matBadgeSize="small">
-        notifications
-      </mat-icon>
-    </button>
+    <app-notification-bell />
 
     <!-- User Menu -->
     @if (user()) {

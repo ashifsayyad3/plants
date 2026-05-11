@@ -1,0 +1,123 @@
+<app-page-header
+  title="Notifications"
+  [subtitle]="store.total() + ' notification(s), ' + store.unreadCount() + ' unread'"
+  [actions]="store.unreadCount() > 0 ? [{ label: 'Mark all read', icon: 'done_all', action: store.markAllRead.bind(store) }] : []"
+/>
+
+<!-- Filters -->
+<div class="nc-toolbar">
+  <mat-form-field appearance="outline" class="nc-channel-select">
+    <mat-label>Channel</mat-label>
+    <mat-select [(ngModel)]="channel" (ngModelChange)="load()">
+      @for (c of channels; track c.value) {
+        <mat-option [value]="c.value">{{ c.label }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <label class="nc-unread-toggle">
+    <mat-checkbox [(ngModel)]="unreadOnly" (ngModelChange)="load()">Unread only</mat-checkbox>
+  </label>
+
+  <span class="nc-spacer"></span>
+
+  @if (selected.size > 0) {
+    <button mat-stroked-button (click)="markSelectedRead()">
+      <mat-icon>done_all</mat-icon> Mark read ({{ selected.size }})
+    </button>
+    <button mat-stroked-button color="warn" (click)="deleteSelected()">
+      <mat-icon>delete</mat-icon> Delete ({{ selected.size }})
+    </button>
+  }
+</div>
+
+<!-- Table -->
+<div class="nc-list">
+
+  <!-- Header row -->
+  <div class="nc-row nc-row--header">
+    <mat-checkbox [checked]="allSelected" (change)="toggleAll($event.checked)" class="nc-check" />
+    <span class="nc-col nc-col--type">Type</span>
+    <span class="nc-col nc-col--title">Title</span>
+    <span class="nc-col nc-col--channel">Channel</span>
+    <span class="nc-col nc-col--time">Time</span>
+    <span class="nc-col nc-col--actions"></span>
+  </div>
+
+  @if (store.loading()) {
+    @for (_ of [1,2,3,4,5]; track $index) {
+      <div class="nc-row nc-row--skeleton">
+        <div class="nc-sk nc-sk--sm"></div>
+        <div class="nc-sk nc-sk--badge"></div>
+        <div class="nc-sk nc-sk--title"></div>
+        <div class="nc-sk nc-sk--sm"></div>
+        <div class="nc-sk nc-sk--sm"></div>
+      </div>
+    }
+  } @else if (store.items().length === 0) {
+    <div class="nc-empty">
+      <mat-icon>notifications_none</mat-icon>
+      <p>No notifications found.</p>
+    </div>
+  } @else {
+    @for (n of store.items(); track n.uuid) {
+      <div class="nc-row" [class.nc-row--unread]="!n.isRead">
+        <mat-checkbox
+          [checked]="selected.has(n.uuid)"
+          (change)="toggleSelect(n.uuid, $event.checked)"
+          class="nc-check"
+        />
+
+        <div class="nc-col nc-col--type">
+          <div class="nc-icon nc-icon--{{ notifVariant(n.type) }}">
+            <mat-icon>{{ notifIcon(n.type) }}</mat-icon>
+          </div>
+        </div>
+
+        <div class="nc-col nc-col--title">
+          <span class="nc-title">{{ n.title }}</span>
+          @if (n.body) {
+            <span class="nc-body">{{ n.body }}</span>
+          }
+        </div>
+
+        <div class="nc-col nc-col--channel">
+          <app-status-badge [value]="n.channel" [config]="{
+            in_app: 'info',
+            email:  'neutral',
+            sms:    'warning',
+            push:   'success'
+          }" />
+        </div>
+
+        <div class="nc-col nc-col--time">
+          <span class="nc-time">{{ n.createdAt | date:'MMM d, h:mm a' }}</span>
+        </div>
+
+        <div class="nc-col nc-col--actions">
+          @if (!n.isRead) {
+            <button mat-icon-button matTooltip="Mark as read" (click)="store.markRead(n.uuid)">
+              <mat-icon>mark_email_read</mat-icon>
+            </button>
+          }
+          <button mat-icon-button color="warn" matTooltip="Delete" (click)="store.delete(n.uuid)">
+            <mat-icon>delete_outline</mat-icon>
+          </button>
+        </div>
+      </div>
+    }
+  }
+</div>
+
+<!-- Pagination -->
+@if (store.totalPages() > 1) {
+  <div class="nc-pagination">
+    <button mat-stroked-button [disabled]="store.page() <= 1" (click)="load(store.page() - 1)">
+      <mat-icon>chevron_left</mat-icon> Prev
+    </button>
+    <span class="nc-page-info">Page {{ store.page() }} of {{ store.totalPages() }}</span>
+    <button mat-stroked-button [disabled]="!store.hasMore()" (click)="load(store.page() + 1)">
+      Next <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
+}

@@ -1,0 +1,97 @@
+@use '../../../../../../styles/variables' as *;
+
+.al-filters {
+  display: flex; align-items: center; gap: $spacing-sm;
+  flex-wrap: wrap; margin-bottom: $spacing-md;
+}
+.al-search         { min-width: 240px; flex: 1; }
+.al-field          { width: 160px; }
+.al-field--date    { width: 190px; }
+.al-count          { font-size: $font-size-sm; color: var(--text-muted); white-space: nowrap; }
+
+.al-table {
+  border: 1px solid var(--surface-border);
+  border-radius: $radius-md;
+  overflow: hidden;
+  background: var(--surface-card);
+}
+
+.al-row {
+  display: grid;
+  grid-template-columns: 160px 180px 140px 110px 160px 48px;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-sm $spacing-md;
+  border-bottom: 1px solid var(--surface-border);
+  transition: background .15s;
+
+  &:last-child { border-bottom: none; }
+  &:hover:not(.al-row--header):not(.al-row--skeleton) { background: var(--surface-hover); }
+
+  &--header {
+    background: var(--surface-ground);
+    font-size: $font-size-sm; font-weight: 600; color: var(--text-secondary);
+  }
+
+  &--expanded { background: color-mix(in srgb, var(--color-primary) 4%, transparent); }
+  &--skeleton { pointer-events: none; }
+}
+
+.al-user-name  { display: block; font-size: $font-size-sm; font-weight: 500; color: var(--text-primary); }
+.al-user-email { display: block; font-size: 11px; color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.al-subject    { font-size: $font-size-sm; color: var(--text-primary); }
+.al-ip         { font-size: $font-size-sm; color: var(--text-secondary); font-family: monospace; }
+.al-time       { font-size: $font-size-sm; color: var(--text-muted); }
+.al-muted      { color: var(--text-muted); font-size: $font-size-sm; }
+
+// Expanded detail panel
+.al-detail {
+  padding: $spacing-md $spacing-md $spacing-md 56px;
+  background: var(--surface-ground);
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.al-detail__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: $spacing-md;
+}
+
+.al-detail__section {
+  h4 { font-size: $font-size-sm; font-weight: 600; color: var(--text-secondary); margin: 0 0 4px; }
+  pre {
+    font-size: 11px; color: var(--text-primary);
+    background: var(--surface-card);
+    border: 1px solid var(--surface-border);
+    border-radius: $radius-sm;
+    padding: $spacing-xs;
+    overflow: auto; max-height: 120px; margin: 0;
+  }
+  code { font-size: 11px; color: var(--text-secondary); word-break: break-all; }
+}
+
+.al-detail__ua {
+  font-size: 11px; color: var(--text-muted);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin: 0;
+}
+
+// Skeleton
+.al-sk {
+  height: 16px; border-radius: 4px;
+  background: var(--surface-hover);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:.4 } }
+
+.al-empty {
+  display: flex; flex-direction: column; align-items: center;
+  padding: $spacing-xl $spacing-lg; color: var(--text-muted);
+  mat-icon { font-size: 48px; width: 48px; height: 48px; }
+  p { margin: $spacing-xs 0 $spacing-sm; }
+}
+
+.al-pagination {
+  display: flex; align-items: center; justify-content: center;
+  gap: $spacing-md; margin-top: $spacing-lg;
+}
+.al-page-info { font-size: $font-size-sm; color: var(--text-muted); }
