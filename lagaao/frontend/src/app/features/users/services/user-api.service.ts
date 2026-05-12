@@ -8,7 +8,7 @@ import {
   UserRecord, UserListFilter, CreateUserPayload, UpdateUserPayload,
   BulkActionPayload, UserActivityLog, RoleRef,
 } from '../models/user.models';
-import { PaginatedResponse } from '../../../../../../../shared/types/api-response.types';
+import { PaginatedResponse } from '@shared/types/api-response.types';
 
 @Injectable({ providedIn: 'root' })
 export class UserApiService {

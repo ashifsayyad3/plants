@@ -94,8 +94,9 @@ export class UserService {
     const t = await sequelize.transaction();
     try {
       const passwordHash = await User.hashPassword(dto.password);
+      const { v4: uuidv4 } = require('uuid');
       const user = await User.create(
-        { name: dto.name, email: dto.email, passwordHash, phone: dto.phone ?? null, status: dto.status, createdBy: actorId },
+        { uuid: uuidv4(), name: dto.name, email: dto.email, passwordHash, phone: dto.phone ?? null, status: dto.status, createdBy: actorId },
         { transaction: t },
       );
 

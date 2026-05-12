@@ -38,7 +38,7 @@ export interface PageAction {
     </div>
   `,
   styles: [`
-    @use '../../../../../styles/variables' as *;
+    @use 'styles/variables' as *;
     .page-header {
       display: flex;
       align-items: flex-start;

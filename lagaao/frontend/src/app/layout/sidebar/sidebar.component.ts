@@ -1,6 +1,6 @@
 import { Component, inject, computed, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive }        from '@angular/router';
-import { NgClass, NgTemplateOutlet }           from '@angular/common';
+import { NgClass, NgTemplateOutlet, TitleCasePipe } from '@angular/common';
 import { MatIconModule }   from '@angular/material/icon';
 import { MatRippleModule } from '@angular/material/core';
 import { MatTooltipModule }from '@angular/material/tooltip';
@@ -13,7 +13,7 @@ import { AppStore }        from '../../core/store/app.store';
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, NgClass, NgTemplateOutlet, MatIconModule, MatRippleModule, MatTooltipModule],
+  imports: [RouterLink, RouterLinkActive, NgClass, NgTemplateOutlet, TitleCasePipe, MatIconModule, MatRippleModule, MatTooltipModule],
   templateUrl: './sidebar.component.html',
   styleUrl:    './sidebar.component.scss',
 })

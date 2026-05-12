@@ -22,25 +22,25 @@ export class AppError extends Error {
 // ─── Convenience Error Subclasses ─────────────────────────────────────────────
 
 export class NotFoundError extends AppError {
-  constructor(message = CONSTANTS.MESSAGES.NOT_FOUND) {
+  constructor(message: string = CONSTANTS.MESSAGES.NOT_FOUND) {
     super(message, CONSTANTS.HTTP_STATUS.NOT_FOUND);
   }
 }
 
 export class ValidationError extends AppError {
-  constructor(message = CONSTANTS.MESSAGES.VALIDATION_ERROR) {
+  constructor(message: string = CONSTANTS.MESSAGES.VALIDATION_ERROR) {
     super(message, CONSTANTS.HTTP_STATUS.BAD_REQUEST);
   }
 }
 
 export class UnauthorizedError extends AppError {
-  constructor(message = CONSTANTS.MESSAGES.UNAUTHORIZED) {
+  constructor(message: string = CONSTANTS.MESSAGES.UNAUTHORIZED) {
     super(message, CONSTANTS.HTTP_STATUS.UNAUTHORIZED);
   }
 }
 
 export class ForbiddenError extends AppError {
-  constructor(message = CONSTANTS.MESSAGES.FORBIDDEN) {
+  constructor(message: string = CONSTANTS.MESSAGES.FORBIDDEN) {
     super(message, CONSTANTS.HTTP_STATUS.FORBIDDEN);
   }
 }
@@ -65,8 +65,9 @@ export function globalErrorHandler(
   res: Response,
   _next: NextFunction,
 ): void {
+  const reqAny = req as any;
   logger.error('Unhandled error', {
-    requestId: req.requestId,
+    requestId: reqAny.requestId,
     message: err.message,
     stack: err.stack,
     method: req.method,

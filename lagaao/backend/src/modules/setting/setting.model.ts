@@ -1,13 +1,13 @@
-import { DataTypes, Sequelize, Optional } from 'sequelize';
+﻿import { DataTypes, Sequelize, Optional } from 'sequelize';
 import { BaseModel } from '../../models/base.model';
 import { BaseAttributes } from '../../types/common.types';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export type SettingType   = 'string' | 'integer' | 'float' | 'boolean' | 'json' | 'array';
 export type SettingGroup  = 'app' | 'mail' | 'payment' | 'sms' | 'storage' | 'feature';
 
-// ─── Attribute Interface ───────────────────────────────────────────────────────
+// â”€â”€â”€ Attribute Interface â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export interface SettingAttributes extends BaseAttributes {
   key: string;
@@ -23,7 +23,7 @@ export interface SettingAttributes extends BaseAttributes {
 export interface SettingCreationAttributes
   extends Optional<SettingAttributes, 'id' | 'value' | 'type' | 'group' | 'label' | 'description' | 'isPublic' | 'isEncrypted' | 'createdAt' | 'updatedAt' | 'deletedAt' | 'createdBy' | 'updatedBy'> {}
 
-// ─── Model ────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Model â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export class Setting extends BaseModel<SettingAttributes, SettingCreationAttributes> {
   declare key: string;
@@ -53,7 +53,7 @@ export class Setting extends BaseModel<SettingAttributes, SettingCreationAttribu
     }
   }
 
-  // ─── Static helpers ──────────────────────────────────────────────────────
+  // â”€â”€â”€ Static helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   static async get(key: string): Promise<unknown> {
     const setting = await Setting.findOne({ where: { key } });
@@ -75,7 +75,7 @@ export class Setting extends BaseModel<SettingAttributes, SettingCreationAttribu
     return Object.fromEntries(settings.map((s) => [s.key, s.castValue()]));
   }
 
-  // ─── Init ─────────────────────────────────────────────────────────────────
+  // â”€â”€â”€ Init â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   static initModel(sequelize: Sequelize): typeof Setting {
     return super.initBase(Setting, sequelize, {
@@ -120,3 +120,4 @@ export class Setting extends BaseModel<SettingAttributes, SettingCreationAttribu
     }, { tableName: 'settings', modelName: 'Setting' });
   }
 }
+

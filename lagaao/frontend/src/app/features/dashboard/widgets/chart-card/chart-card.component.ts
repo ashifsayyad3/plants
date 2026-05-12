@@ -9,7 +9,7 @@ import { MatMenuModule }   from '@angular/material/menu';
 import type { Chart as ChartType, ChartConfiguration } from 'chart.js';
 import { SkeletonComponent } from '../skeleton/skeleton.component';
 import { ExportService }     from '../../services/export.service';
-import { ThemeService }      from '../../../../../core/services/theme.service';
+import { ThemeService }      from '../../../../core/services/theme.service';
 import { ChartDataPoint }    from '../../models/dashboard.models';
 
 export type ChartKind = 'line' | 'bar' | 'doughnut' | 'pie';
@@ -47,7 +47,7 @@ export type ChartKind = 'line' | 'bar' | 'doughnut' | 'pie';
     </div>
   `,
   styles: [`
-    @use '../../../../../../styles/variables' as *;
+    @use 'styles/variables' as *;
 
     .chart-card {
       background: var(--surface-card);

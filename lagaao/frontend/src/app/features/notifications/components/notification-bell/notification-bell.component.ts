@@ -92,7 +92,7 @@ import { notifIcon, notifVariant } from '../../models/notification.models';
     </mat-menu>
   `,
   styles: [`
-    @use '../../../../../../../styles/variables' as *;
+    @use 'styles/variables' as *;
 
     ::ng-deep .notif-menu .mat-mdc-menu-panel {
       max-width: 360px !important;

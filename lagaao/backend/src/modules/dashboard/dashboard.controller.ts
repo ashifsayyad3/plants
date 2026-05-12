@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { dashboardService } from './dashboard.service';
-import { HTTP_STATUS, MESSAGES } from '../../config/constants';
+import { CONSTANTS } from '../../config/constants';
+const HTTP_STATUS = CONSTANTS.HTTP_STATUS;
 
 function asyncHandler(fn: (req: Request, res: Response) => Promise<void>) {
   return (req: Request, res: Response, next: any) => fn(req, res).catch(next);

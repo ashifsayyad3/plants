@@ -33,7 +33,7 @@ import { KpiStats, KpiCardConfig } from '../../models/dashboard.models';
     </div>
   `,
   styles: [`
-    @use '../../../../../../styles/variables' as *;
+    @use 'styles/variables' as *;
 
     .kpi-card {
       display: flex;

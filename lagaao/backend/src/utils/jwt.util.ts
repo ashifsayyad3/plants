@@ -31,7 +31,7 @@ export interface EmailTokenPayload {
 // ─── Sign ─────────────────────────────────────────────────────────────────────
 
 export function signAccessToken(payload: Omit<AccessTokenPayload, 'type'>): string {
-  return jwt.sign(
+  return (jwt.sign as any)(
     { ...payload, type: 'access' },
     env.JWT_SECRET,
     { expiresIn: env.JWT_EXPIRES_IN, issuer: 'lagaao.com', audience: 'lagaao-client' },
@@ -39,7 +39,7 @@ export function signAccessToken(payload: Omit<AccessTokenPayload, 'type'>): stri
 }
 
 export function signRefreshToken(userId: number, jti: string): string {
-  return jwt.sign(
+  return (jwt.sign as any)(
     { sub: userId, jti, type: 'refresh' },
     env.JWT_REFRESH_SECRET,
     { expiresIn: env.JWT_REFRESH_EXPIRES_IN, issuer: 'lagaao.com' },
@@ -51,7 +51,7 @@ export function signEmailToken(
   email: string,
   purpose: EmailTokenPayload['purpose'],
 ): string {
-  return jwt.sign(
+  return (jwt.sign as any)(
     { sub: userId, email, purpose, type: 'email' },
     env.JWT_SECRET,
     { expiresIn: '10m', issuer: 'lagaao.com' },
@@ -65,7 +65,7 @@ export function verifyAccessToken(token: string): AccessTokenPayload {
     return jwt.verify(token, env.JWT_SECRET, {
       issuer: 'lagaao.com',
       audience: 'lagaao-client',
-    }) as AccessTokenPayload;
+    }) as unknown as AccessTokenPayload;
   } catch (err) {
     if (err instanceof jwt.TokenExpiredError) {
       throw new AppError('Access token expired', CONSTANTS.HTTP_STATUS.UNAUTHORIZED);
@@ -78,7 +78,7 @@ export function verifyRefreshToken(token: string): RefreshTokenPayload {
   try {
     return jwt.verify(token, env.JWT_REFRESH_SECRET, {
       issuer: 'lagaao.com',
-    }) as RefreshTokenPayload;
+    }) as unknown as RefreshTokenPayload;
   } catch {
     throw new AppError('Invalid or expired refresh token', CONSTANTS.HTTP_STATUS.UNAUTHORIZED);
   }
@@ -88,7 +88,7 @@ export function verifyEmailToken(token: string): EmailTokenPayload {
   try {
     return jwt.verify(token, env.JWT_SECRET, {
       issuer: 'lagaao.com',
-    }) as EmailTokenPayload;
+    }) as unknown as EmailTokenPayload;
   } catch {
     throw new AppError('Invalid or expired token', CONSTANTS.HTTP_STATUS.BAD_REQUEST);
   }

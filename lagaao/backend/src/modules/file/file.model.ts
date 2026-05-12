@@ -106,7 +106,7 @@ export class File extends BaseModel<FileAttributes, FileCreationAttributes> {
         type:      DataTypes.JSON,
         allowNull: true,
       },
-    }, { tableName: 'files', modelName: 'File' });
+    } as any, { tableName: 'files', modelName: 'File' }) as any;
   }
 
   // ─── Associations ──────────────────────────────────────────────────────────

@@ -34,13 +34,10 @@ module.exports = {
         type:      Sequelize.STRING(20),
         allowNull: true,
       },
-      // FK to files.id — set after files table exists
+      // FK constraint added in 20240101000004-create-files.js after files table exists
       avatar_id: {
-        type:       Sequelize.INTEGER.UNSIGNED,
-        allowNull:  true,
-        references: { model: 'files', key: 'id' },
-        onUpdate:   'CASCADE',
-        onDelete:   'SET NULL',
+        type:      Sequelize.INTEGER.UNSIGNED,
+        allowNull: true,
       },
       status: {
         type:         Sequelize.ENUM('active', 'inactive', 'banned', 'pending'),

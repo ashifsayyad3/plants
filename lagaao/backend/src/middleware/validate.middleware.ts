@@ -35,7 +35,7 @@ export function validate(schemas: ValidationSchemas): RequestHandler {
         Object.assign(allErrors, fieldErrors);
       } else {
         // Replace with parsed/coerced value (e.g. string "1" → number 1)
-        (req as Record<string, unknown>)[target] = result.data;
+        (req as unknown as Record<string, unknown>)[target] = result.data;
       }
     }
 

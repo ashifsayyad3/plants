@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, map }   from 'rxjs';
 import { ApiService }        from '../../../core/services/api.service';
 import { NotificationRecord } from '../models/notification.models';
-import { PaginatedResponse }  from '../../../../../../../shared/types/api-response.types';
+import { PaginatedResponse }  from '@shared/types/api-response.types';
 
 export interface ListParams {
   page?:       number;

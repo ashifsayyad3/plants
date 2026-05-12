@@ -10,6 +10,7 @@ import { MatInputModule }    from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule }  from '@angular/material/tooltip';
 import { MatChipsModule }    from '@angular/material/chips';
+import { MatDividerModule }  from '@angular/material/divider';
 import { DatePipe }          from '@angular/common';
 
 import { UserStore }          from '../../store/user.store';
@@ -31,7 +32,7 @@ import type { BadgeConfig }   from '../../../../shared/components/status-badge/s
   imports: [
     FormsModule, DatePipe,
     MatButtonModule, MatIconModule, MatMenuModule, MatSelectModule,
-    MatFormFieldModule, MatInputModule, MatCheckboxModule, MatTooltipModule, MatChipsModule,
+    MatFormFieldModule, MatInputModule, MatCheckboxModule, MatTooltipModule, MatChipsModule, MatDividerModule,
     StatusBadgeComponent, AvatarComponent, EmptyStateComponent, PageHeaderComponent,
     BulkActionToolbarComponent, SkeletonComponent, TimeAgoPipe, TruncatePipe,
   ],

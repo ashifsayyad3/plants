@@ -82,9 +82,20 @@ module.exports = {
     await queryInterface.addIndex('files', ['model_type', 'model_id'], { name: 'idx_files_polymorphic' });
     await queryInterface.addIndex('files', ['uploaded_by'],             { name: 'idx_files_uploaded_by' });
     await queryInterface.addIndex('files', ['deleted_at'],              { name: 'idx_files_deleted_at' });
+
+    // Add the FK from users.avatar_id → files.id now that both tables exist
+    await queryInterface.addConstraint('users', {
+      fields:     ['avatar_id'],
+      type:       'foreign key',
+      name:       'fk_users_avatar_id',
+      references: { table: 'files', field: 'id' },
+      onUpdate:   'CASCADE',
+      onDelete:   'SET NULL',
+    });
   },
 
   async down(queryInterface) {
+    await queryInterface.removeConstraint('users', 'fk_users_avatar_id').catch(() => {});
     await queryInterface.dropTable('files');
   },
 };

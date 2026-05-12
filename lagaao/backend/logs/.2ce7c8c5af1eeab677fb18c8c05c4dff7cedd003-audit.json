@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 30
+    },
+    "auditLog": "E:\\plants\\lagaao\\backend\\logs\\.2ce7c8c5af1eeab677fb18c8c05c4dff7cedd003-audit.json",
+    "files": [
+        {
+            "date": 1778603449266,
+            "name": "E:\\plants\\lagaao\\backend\\logs\\error-2026-05-12.log",
+            "hash": "47c1c3036f33f6b4d36b61d0f5d99e5161ed28d61efb3acd28c87d52a6200b0a"
+        }
+    ],
+    "hashType": "sha256"
+}

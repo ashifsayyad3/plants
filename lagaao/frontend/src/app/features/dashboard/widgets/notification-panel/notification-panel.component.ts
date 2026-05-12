@@ -5,8 +5,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatBadgeModule }  from '@angular/material/badge';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { SkeletonComponent }   from '../skeleton/skeleton.component';
-import { TimeAgoPipe }         from '../../../../../shared/pipes/time-ago.pipe';
-import { StatusBadgeComponent, BadgeVariant } from '../../../../../shared/components/status-badge/status-badge.component';
+import { TimeAgoPipe }         from '../../../../shared/pipes/time-ago.pipe';
+import { StatusBadgeComponent, BadgeVariant } from '../../../../shared/components/status-badge/status-badge.component';
 import { NotificationEntry }   from '../../models/dashboard.models';
 
 const TYPE_VARIANT: Record<string, BadgeVariant> = {
@@ -71,7 +71,7 @@ const TYPE_ICON: Record<string, string> = {
     </div>
   `,
   styles: [`
-    @use '../../../../../../styles/variables' as *;
+    @use 'styles/variables' as *;
 
     .notif-card {
       background: var(--surface-card);

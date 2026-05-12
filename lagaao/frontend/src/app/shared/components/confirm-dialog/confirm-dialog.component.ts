@@ -37,7 +37,7 @@ export interface ConfirmDialogData {
     </div>
   `,
   styles: [`
-    @use '../../../../../styles/variables' as *;
+    @use 'styles/variables' as *;
     .confirm-dialog { min-width: 360px; max-width: 480px; }
     .confirm-dialog__header {
       display: flex;

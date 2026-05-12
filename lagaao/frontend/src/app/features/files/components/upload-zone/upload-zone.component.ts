@@ -38,6 +38,7 @@ export class UploadZoneComponent implements OnDestroy {
   readonly multiple    = input<boolean>(true);
   readonly maxSizeMb   = input<number>(8);
   readonly maxCount    = input<number>(10);
+  readonly maxFiles    = input<number>(10);  // alias for maxCount used by consumers
   readonly modelType   = input<string | undefined>(undefined);
   readonly modelId     = input<number | undefined>(undefined);
   readonly isPublic    = input<boolean>(false);

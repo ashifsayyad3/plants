@@ -1,8 +1,8 @@
-import { DataTypes, Sequelize, Optional, BelongsToManyGetAssociationsMixin, BelongsToManyAddAssociationMixin } from 'sequelize';
+﻿import { DataTypes, Sequelize, Optional, BelongsToManyGetAssociationsMixin, BelongsToManyAddAssociationMixin } from 'sequelize';
 import { BaseModel } from '../../models/base.model';
 import { BaseAttributes } from '../../types/common.types';
 
-// ─── Attribute Interface ───────────────────────────────────────────────────────
+// â”€â”€â”€ Attribute Interface â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export interface RoleAttributes extends BaseAttributes {
   name: string;
@@ -14,7 +14,7 @@ export interface RoleAttributes extends BaseAttributes {
 export interface RoleCreationAttributes
   extends Optional<RoleAttributes, 'id' | 'description' | 'isSystem' | 'createdAt' | 'updatedAt' | 'deletedAt' | 'createdBy' | 'updatedBy'> {}
 
-// ─── Model ────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Model â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export class Role extends BaseModel<RoleAttributes, RoleCreationAttributes> {
   declare name: string;
@@ -26,13 +26,13 @@ export class Role extends BaseModel<RoleAttributes, RoleCreationAttributes> {
   declare getPermissions: BelongsToManyGetAssociationsMixin<import('../permission/permission.model').Permission>;
   declare addPermission: BelongsToManyAddAssociationMixin<import('../permission/permission.model').Permission, number>;
 
-  // ─── Static helpers ──────────────────────────────────────────────────────
+  // â”€â”€â”€ Static helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   static findBySlug(slug: string): Promise<Role | null> {
     return Role.findOne({ where: { slug } });
   }
 
-  // ─── Init ─────────────────────────────────────────────────────────────────
+  // â”€â”€â”€ Init â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   static initModel(sequelize: Sequelize): typeof Role {
     return super.initBase(Role, sequelize, {
@@ -60,7 +60,7 @@ export class Role extends BaseModel<RoleAttributes, RoleCreationAttributes> {
     }, { tableName: 'roles', modelName: 'Role' });
   }
 
-  // ─── Associations ──────────────────────────────────────────────────────────
+  // â”€â”€â”€ Associations â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   static associate(): void {
     const { Permission, User, RolePermission, UserRole } = require('../index');
@@ -83,3 +83,4 @@ export class Role extends BaseModel<RoleAttributes, RoleCreationAttributes> {
     Role.hasMany(UserRole,       { foreignKey: 'roleId', as: 'userRoles' });
   }
 }
+

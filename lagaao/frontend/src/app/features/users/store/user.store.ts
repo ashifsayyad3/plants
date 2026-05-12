@@ -5,7 +5,7 @@ import { ToastService }   from '../../../core/services/toast.service';
 import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service';
 import { ExportService }  from '../../dashboard/services/export.service';
 import { UserRecord, UserListFilter, BulkActionPayload, RoleRef } from '../models/user.models';
-import { PaginationMeta } from '../../../../../../../shared/types/api-response.types';
+import { PaginationMeta } from '@shared/types/api-response.types';
 
 const DEFAULT_FILTER: UserListFilter = {
   search: '', status: '', roleId: '', sortBy: 'createdAt', sortDir: 'DESC', page: 1, limit: 15,

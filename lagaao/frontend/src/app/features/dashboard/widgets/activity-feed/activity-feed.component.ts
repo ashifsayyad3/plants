@@ -4,8 +4,8 @@ import { MatIconModule }   from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { SkeletonComponent }  from '../skeleton/skeleton.component';
-import { AvatarComponent }    from '../../../../../shared/components/avatar/avatar.component';
-import { TimeAgoPipe }        from '../../../../../shared/pipes/time-ago.pipe';
+import { AvatarComponent }    from '../../../../shared/components/avatar/avatar.component';
+import { TimeAgoPipe }        from '../../../../shared/pipes/time-ago.pipe';
 import { ActivityEntry }      from '../../models/dashboard.models';
 
 const ACTION_ICON: Record<string, string> = {
@@ -68,7 +68,7 @@ const ACTION_ICON: Record<string, string> = {
     </div>
   `,
   styles: [`
-    @use '../../../../../../styles/variables' as *;
+    @use 'styles/variables' as *;
 
     .feed-card {
       background: var(--surface-card);

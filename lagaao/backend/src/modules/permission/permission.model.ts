@@ -1,8 +1,8 @@
-import { DataTypes, Sequelize, Optional } from 'sequelize';
+﻿import { DataTypes, Sequelize, Optional } from 'sequelize';
 import { BaseModel } from '../../models/base.model';
 import { BaseAttributes } from '../../types/common.types';
 
-// ─── Attribute Interface ───────────────────────────────────────────────────────
+// â”€â”€â”€ Attribute Interface â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export interface PermissionAttributes extends BaseAttributes {
   name: string;
@@ -14,7 +14,7 @@ export interface PermissionAttributes extends BaseAttributes {
 export interface PermissionCreationAttributes
   extends Optional<PermissionAttributes, 'id' | 'description' | 'createdAt' | 'updatedAt' | 'deletedAt' | 'createdBy' | 'updatedBy'> {}
 
-// ─── Model ────────────────────────────────────────────────────────────────────
+// â”€â”€â”€ Model â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export class Permission extends BaseModel<PermissionAttributes, PermissionCreationAttributes> {
   declare name: string;
@@ -22,7 +22,7 @@ export class Permission extends BaseModel<PermissionAttributes, PermissionCreati
   declare action: string;
   declare description: string | null;
 
-  // ─── Static helpers ──────────────────────────────────────────────────────
+  // â”€â”€â”€ Static helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   /** Build a permission name from module + action: "listings:create" */
   static buildName(module: string, action: string): string {
@@ -33,7 +33,7 @@ export class Permission extends BaseModel<PermissionAttributes, PermissionCreati
     return Permission.findOne({ where: { name } });
   }
 
-  // ─── Init ─────────────────────────────────────────────────────────────────
+  // â”€â”€â”€ Init â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   static initModel(sequelize: Sequelize): typeof Permission {
     return super.initBase(Permission, sequelize, {
@@ -66,7 +66,7 @@ export class Permission extends BaseModel<PermissionAttributes, PermissionCreati
     });
   }
 
-  // ─── Associations ──────────────────────────────────────────────────────────
+  // â”€â”€â”€ Associations â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   static associate(): void {
     const { Role, RolePermission } = require('../index');
@@ -81,3 +81,4 @@ export class Permission extends BaseModel<PermissionAttributes, PermissionCreati
     Permission.hasMany(RolePermission, { foreignKey: 'permissionId', as: 'rolePermissions' });
   }
 }
+

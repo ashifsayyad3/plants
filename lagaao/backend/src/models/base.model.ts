@@ -69,12 +69,12 @@ export abstract class BaseModel<
     sequelizeInstance: Sequelize,
     columns: ModelAttributes,
     options: Partial<ModelOptions> = {},
-  ): ModelStatic<M> {
+  ): any {
     modelClass.init(
       {
         ...BaseModel.auditAttributes,
         ...columns,
-      },
+      } as any,
       {
         sequelize: sequelizeInstance,
         timestamps: true,

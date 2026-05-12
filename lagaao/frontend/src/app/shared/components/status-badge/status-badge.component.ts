@@ -17,7 +17,7 @@ export interface BadgeConfig {
     </span>
   `,
   styles: [`
-    @use '../../../../../styles/variables' as *;
+    @use 'styles/variables' as *;
     .badge {
       display: inline-flex;
       align-items: center;

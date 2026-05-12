@@ -31,7 +31,9 @@ export function formatAction(action: string): string {
 }
 
 // Map action prefix → color class
-export function actionVariant(action: string): string {
+import type { BadgeVariant } from '../../../shared/components/status-badge/status-badge.component';
+
+export function actionVariant(action: string): BadgeVariant {
   if (action.startsWith('api.delete')) return 'danger';
   if (action.startsWith('api.post') || action.includes('.create')) return 'success';
   if (action.startsWith('api.patch') || action.includes('.update')) return 'warning';

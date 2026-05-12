@@ -21,7 +21,7 @@ import { MatButtonModule } from '@angular/material/button';
     </div>
   `,
   styles: [`
-    @use '../../../../../styles/variables' as *;
+    @use 'styles/variables' as *;
     .empty-state {
       display: flex;
       flex-direction: column;

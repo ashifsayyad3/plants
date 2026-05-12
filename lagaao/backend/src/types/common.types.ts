@@ -48,8 +48,12 @@ export type FilterMap = Record<string, FilterOperator | unknown>;
 export interface AuthenticatedRequest extends Request {
   user?: {
     id: number;
+    uuid: string;
     email: string;
     role: string;
+    roles: string[];
+    permissions: string[];
+    emailVerifiedAt?: Date | null;
   };
   requestId?: string;
 }

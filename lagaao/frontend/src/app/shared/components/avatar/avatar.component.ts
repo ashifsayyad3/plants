@@ -15,7 +15,7 @@ import { NgStyle } from '@angular/common';
     }
   `,
   styles: [`
-    @use '../../../../../styles/variables' as *;
+    @use 'styles/variables' as *;
     .avatar {
       display: inline-flex;
       align-items: center;
